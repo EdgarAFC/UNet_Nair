@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load students_env/1.0
-srun python /mnt/nfs/efernandez/projects/DDPM_model/met.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/U-NET-BF.py
