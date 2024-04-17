@@ -19,11 +19,11 @@ TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 
 ################################
-file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w9.txt", "w")
+file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "w")
 file_loss.close()
 ################################
 def write_to_file(input): 
-    with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w9.txt", "a") as textfile: 
+    with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "a") as textfile: 
         textfile.write(str(input) + "\n") 
     textfile.close()
 
@@ -250,8 +250,7 @@ def main():
       optimizer_unet.zero_grad()
       x = x.to(device)
       y = y.to(device)
-
-
+      
       score1 = nn_model(x)
 
       # print("score shape ",score1.shape)
