@@ -19,7 +19,7 @@ TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 ################################
 file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "w")
-file_loss.close()
+# file_loss.close()
 ################################
 def write_to_file(input): 
     with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "a") as textfile: 
@@ -272,7 +272,7 @@ def main():
       # checkpoint = {'state_dict' : nn_model.state_dict(), 'optimizer': optimizer_unet.state_dict()}
       # save_checkpoint(checkpoint,save_dir+f"/model_{ep}.pth")
       torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
-      np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr))  
+      np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr.cpu()))  
 
 
 if __name__ == '__main__':
