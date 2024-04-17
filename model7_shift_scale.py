@@ -105,7 +105,7 @@ class UNETv13(nn.Module):
 
         # x = torch.cat((x,y), dim=1)
         x = self.initial_conv(x)
-        print("x size:", x.shape)
+        # print("x size:", x.shape)
         x = self.initial_block(x)
 
         # Convolutional layers and max-pooling
