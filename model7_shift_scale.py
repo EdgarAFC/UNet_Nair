@@ -456,7 +456,7 @@ class ResBlock2(nn.Module):
         :param emb: an [N x emb_channels] Tensor of timestep embeddings.
         :return: an [N x C x ...] Tensor of outputs.
         """
-        print("x size",x.shape)
+        # print("x size",x.shape)
         return checkpoint(
             self._forward, (x,), self.parameters(), self.use_checkpoint
         )
