@@ -244,13 +244,13 @@ def main():
 
       score1 = nn_model(x)
 
-      print("score shape ",score1.shape)
-      print("y shape ",y.shape)
+      # print("score shape ",score1.shape)
+      # print("y shape ",y.shape)
       loss=nn.L1Loss()
       cost1 = loss(score1, y)
       cost1.backward()
 
-      print("cost: ",cost1)
+      # print("cost: ",cost1)
       
       loss_arr.append(cost1)
       optimizer_unet.step()
