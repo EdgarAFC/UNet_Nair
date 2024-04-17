@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import os
 import torch
 from torch import nn, optim
-from torch.nn import functional as F
 from torchvision import transforms as T
 from torch.utils.data import DataLoader, Dataset, random_split
 #
@@ -250,7 +249,7 @@ def main():
       optimizer_unet.zero_grad()
       x = x.to(device)
       y = y.to(device)
-      
+
       score1 = nn_model(x)
 
       # print("score shape ",score1.shape)
