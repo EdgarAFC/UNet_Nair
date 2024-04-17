@@ -18,6 +18,16 @@ TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 
+################################
+file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w9.txt", "w")
+file_loss.close()
+################################
+def write_to_file(input): 
+    with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w9.txt", "a") as textfile: 
+        textfile.write(str(input) + "\n") 
+    textfile.close()
+
+
 # TRAIN_PATH='/TESIS/DATOS_1/rf_train'
 # TRAIN_ONEPW_PATH = '/TESIS/DATOS_TESIS2/onepw_train'
 
@@ -254,10 +264,13 @@ def main():
       
       loss_arr.append(cost1)
       optimizer_unet.step()
-      
+
     print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
-    
-    if ep % 5 == 0 or ep == int(n_epoch) or ep == 0:
+    write_to_file("Epoch:")
+    write_to_file(ep)
+    write_to_file(datetime.now())
+
+    if ep % 5 == 0 or ep == int(n_epoch) or ep == 1:
       # checkpoint = {'state_dict' : nn_model.state_dict(), 'optimizer': optimizer_unet.state_dict()}
       # save_checkpoint(checkpoint,save_dir+f"/model_{ep}.pth")
       torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
