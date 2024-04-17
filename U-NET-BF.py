@@ -12,19 +12,21 @@ from PIL import Image
 from datetime import datetime
 from model7_shift_scale import UNETv13
 
+import torch.nn.functional as func
+
 TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
 
-################################
-file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "w")
+# ###############################
+# file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "w")
 # file_loss.close()
-################################
-def write_to_file(input): 
-    with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "a") as textfile: 
-        textfile.write(str(input) + "\n") 
-    textfile.close()
+# ################################
+# def write_to_file(input): 
+#     with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "a") as textfile: 
+#         textfile.write(str(input) + "\n") 
+#     textfile.close()
 
 
 # TRAIN_PATH='/TESIS/DATOS_1/rf_train'
@@ -254,25 +256,25 @@ def main():
 
       # print("score shape ",score1.shape)
       # print("y shape ",y.shape)
-      loss=nn.L1Loss()
-      cost1 = loss(score1, y)
+      # loss=nn.L1Loss()
+      cost1 = func.l1_loss(score1, y)
       cost1.backward()
 
       # print("cost: ",cost1)
       
-      loss_arr.append(cost1)
+      loss_arr.append(cost1.item())
       optimizer_unet.step()
 
-    print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
-    write_to_file("Epoch:")
-    write_to_file(ep)
-    write_to_file(datetime.now())
+    # print(f' Epoch {ep:03}/{n_epoch}, loss: {loss_arr[-1]:.2f}, {datetime.now()}')
+    # write_to_file("Epoch:")
+    # write_to_file(ep)
+    # write_to_file(datetime.now())
 
     if ep % 5 == 0 or ep == int(n_epoch) or ep == 1:
       # checkpoint = {'state_dict' : nn_model.state_dict(), 'optimizer': optimizer_unet.state_dict()}
       # save_checkpoint(checkpoint,save_dir+f"/model_{ep}.pth")
       torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
-      np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr.cpu()))  
+      np.save(save_dir+f"/loss_{ep}.npy", np.array(loss_arr))  
 
 
 if __name__ == '__main__':
