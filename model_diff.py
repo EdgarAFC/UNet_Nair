@@ -7,7 +7,7 @@ from RRDB import RRDBNet
 class UNETv13(nn.Module):
     def __init__(
             self, 
-            in_channels=3, 
+            in_channels=2, 
             out_channels=1, 
             features=[64, 128, 256, 512], 
             emb_dim = 256,
@@ -15,16 +15,17 @@ class UNETv13(nn.Module):
             attention_heads = 4,
             attention_res = [256,512],
             group_norm = True,
+
         ):
         super(UNETv13, self).__init__()
 
-        self.time_mlp = nn.Sequential(
-            PositionalEncoding(features[0]),
-            linear(features[0], emb_dim),
-            SiLU(),   #commented efernandez 13.03.2024
-            # nn.ReLU(),
-            linear(emb_dim, emb_dim),
-        )
+        # self.time_mlp = nn.Sequential(
+        #     PositionalEncoding(features[0]),
+        #     linear(features[0], emb_dim),
+        #     SiLU(),   #commented efernandez 13.03.2024
+        #     # nn.ReLU(),
+        #     linear(emb_dim, emb_dim),
+        # )
 
         self.initial_conv = conv_nd(2, in_channels, features[0], 3, padding=1)
         
@@ -97,20 +98,22 @@ class UNETv13(nn.Module):
 
         self.final_block = nn.Conv2d(features[0], out_channels, kernel_size=1)
 
-    def forward(self, x, y, t):
+    def forward(self, x):
         # x: IQ image
         # y: Noisy Bmode
-        time_emb = self.time_mlp(t)
+        # time_emb = self.time_mlp(t)
 
-        x = torch.cat((x,y), dim=1)
-        x = self.initial_block(self.initial_conv(x),time_emb)
+        # x = torch.cat((x,y), dim=1)
+        x = self.initial_conv(x)
+        # print("x size:", x.shape)
+        x = self.initial_block(x)
 
         # Convolutional layers and max-pooling
         skip_connections = []
         for idx in range(len(self.downBlocks)):
             skip_connections.append(x)
             x = self.pool(x)
-            x = self.downBlocks[idx](x, time_emb)
+            x = self.downBlocks[idx](x)
             x = self.downAttention[idx](x)
 
         # Convolutional layers and up-sampling
@@ -118,7 +121,7 @@ class UNETv13(nn.Module):
         for idx in range(len(self.upBlocks)):
             x = self.upConvs[idx](x)  # UpConvolution
             concat_skip = torch.cat((skip_connections[idx], x), dim=1)
-            x = self.upBlocks[idx](concat_skip, time_emb)  # Double convs
+            x = self.upBlocks[idx](concat_skip)  # Double convs
             x = self.upAttention[idx](x)
 
         return self.final_block(x)
@@ -409,14 +412,14 @@ class ResBlock2(nn.Module):
             SiLU()
             
         )
-        self.emb_layers = nn.Sequential(
-            SiLU(),   #commented efernandez 13.03.2024
-            # nn.ReLU(),
-            linear(
-                emb_channels,
-                2 * self.out_channels if use_scale_shift_norm else self.out_channels,
-            ),
-        )
+        # self.emb_layers = nn.Sequential(
+        #     SiLU(),   #commented efernandez 13.03.2024
+        #     # nn.ReLU(),
+        #     linear(
+        #         emb_channels,
+        #         2 * self.out_channels if use_scale_shift_norm else self.out_channels,
+        #     ),
+        # )
         self.out_layers = nn.Sequential(
             # normalization(self.out_channels, group_norm),
             # SiLU(),   #commented efernandez 13.03.2024
@@ -445,7 +448,7 @@ class ResBlock2(nn.Module):
         else:
             self.skip_connection = None
 
-    def forward(self, x, emb):
+    def forward(self, x):
         """
         Apply the block to a Tensor, conditioned on a timestep embedding.
 
@@ -453,24 +456,26 @@ class ResBlock2(nn.Module):
         :param emb: an [N x emb_channels] Tensor of timestep embeddings.
         :return: an [N x C x ...] Tensor of outputs.
         """
+        # print("x size",x.shape)
         return checkpoint(
-            self._forward, (x, emb), self.parameters(), self.use_checkpoint
+            self._forward, (x,), self.parameters(), self.use_checkpoint
         )
 
-    def _forward(self, x, emb):
+    def _forward(self, x):
         h = self.in_layers(x)
         # print(emb.shape)
-        emb_out = self.emb_layers(emb).type(h.dtype)
-        while len(emb_out.shape) < len(h.shape):
-            emb_out = emb_out[..., None]
-        if self.use_scale_shift_norm:
-            out_norm, out_rest = self.out_layers[0], self.out_layers[1:]
-            scale, shift = th.chunk(emb_out, 2, dim=1)
-            h = out_norm(h) * (1 + scale) + shift
-            h = out_rest(h)
-        else:
-            h = h + emb_out
-            h = self.out_layers(h)
+        # emb_out = self.emb_layers(emb).type(h.dtype)
+        # while len(emb_out.shape) < len(h.shape):
+        #     emb_out = emb_out[..., None]
+        # if self.use_scale_shift_norm:
+        #     out_norm, out_rest = self.out_layers[0], self.out_layers[1:]
+        #     scale, shift = th.chunk(emb_out, 2, dim=1)
+        #     h = out_norm(h) * (1 + scale) + shift
+        #     h = out_rest(h)
+        # else:
+        #     h = h + emb_out
+        #     h = self.out_layers(h)
+        h = self.out_layers(h)
         if self.residual:
             h = self.skip_connection(x) + h
         return h
