@@ -13,7 +13,7 @@ import copy
 
 import torch
 
-from model7 import UNETv13
+from model7_shift_scale import UNETv13
 import guided_diffusion_v3 as gd
 from matplotlib import pyplot as plt
 
@@ -364,14 +364,14 @@ def main():
     shape_dir = ''
 
 
-    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v9_TT_50epoch_gen_att/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v7_TT_50epoch_gen_att/'
     # save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_50epoch_gen_att/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/Udiffusive/v1_50epoch_gen_att/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
     # model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_50epoch/'
-    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v9_TT_50epoch/'
+    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v7_TT_50epoch/'
     # model_dir='/CODIGOS_TESIS/T2/trained_models/Udiffusive'
     training_epochs = 50#10
     model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
@@ -380,7 +380,7 @@ def main():
     depth_ini=30
 
     num_samples = 100
-    diffusion = create_gaussian_diffusion(noise_schedule="linear")
+    diffusion = create_gaussian_diffusion(noise_schedule="cosine")
 
     # inclusion_shape = 'triangle'
     # h5name = "inclusion_%s.h5" % inclusion_shape
