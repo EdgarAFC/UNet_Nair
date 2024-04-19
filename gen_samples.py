@@ -370,6 +370,11 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
 
+
+    att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
+    shape_dir = ''
+
+
     save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/Udiffusive/v1_50epoch_gen_att/'
     if not os.path.exists(save_dir):
@@ -392,7 +397,7 @@ def main():
     for simu in range(0,num_samples):
         simu_name = dir_list[simu]
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
-        bmode, grid_full=create_phantom_bmodes_att_diff('/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/',simu_name, depth_ini, device, model,diffusion)
+        bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
         np.save(save_dir+simu_name+".npy", bmode)
         # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
         # extent=[-20,20,50,0]
