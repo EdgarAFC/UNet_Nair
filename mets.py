@@ -164,7 +164,7 @@ def main():
         #testing model v6
         dir_model_v6 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att/'
         bmode_output = np.load(dir_model_v6+filename).squeeze()
-        bmode_output = (bmode_output + 1) * 30 - 60
+        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
         sub_row.append(contrast)
         sub_row.append(cnr)
@@ -192,7 +192,7 @@ def main():
         #testing model v9
         dir_model_v9 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v9_TT_50epoch_gen_att/'
         bmode_output = np.load(dir_model_v9+filename).squeeze()
-        bmode_output = (bmode_output + 1) * 30 - 60
+        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
         sub_row.append(contrast)
         sub_row.append(cnr)
@@ -206,7 +206,7 @@ def main():
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_50epoch_gen_att/'
         bmode_output = np.load(dir_model_v9+filename).squeeze()
-        bmode_output = (bmode_output + 1) * 30 - 60
+        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
         sub_row.append(contrast)
         sub_row.append(cnr)
