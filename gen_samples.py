@@ -379,7 +379,7 @@ def main():
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    model_dir='/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_50epoch'
+    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch'
     # model_dir='/CODIGOS_TESIS/T2/trained_models/Udiffusive'
     training_epochs = 50#10
     model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
