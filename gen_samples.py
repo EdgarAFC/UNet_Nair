@@ -374,7 +374,7 @@ def main():
     shape_dir = ''
 
 
-    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/Udiffusive/v1_50epoch_gen_att/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
@@ -393,8 +393,8 @@ def main():
     # inclusion_shape = 'triangle'
     # h5name = "inclusion_%s.h5" % inclusion_shape
 
-    for simu in range(0,num_samples):
-        simu_name = dir_list[simu]
+    for simu in range(1,num_samples+1):
+        simu_name = "simu" + str(simu).zfill(5)
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
         bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
         np.save(save_dir+simu_name+".npy", bmode)
