@@ -13,7 +13,7 @@ import copy
 
 import torch
 
-from model7_shift_scale import UNETv13
+from model_diff import UNETv13
 import guided_diffusion_v3 as gd
 from matplotlib import pyplot as plt
 
@@ -356,16 +356,6 @@ def create_phantom_bmodes_att_diff(h5_dir, simu_name, depth_ini, device, model,d
 
 def main():
 
-    # Get the list of all files and directories
-    path = "/mnt/nfs/efernandez/datasets/dataRF/RF_test/"
-    dir_list = sorted(os.listdir(path))
-    # print("Files and directories in '", path, "' :")
-    # prints all files
-    # print(dir_list)
-
-    for i in range(0, len(dir_list)):
-        dir_list[i] = dir_list[i][:-4]
-
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
 
@@ -374,12 +364,13 @@ def main():
     shape_dir = ''
 
 
-    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att/'
+    # save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_50epoch_gen_att/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_50epoch_gen_att/'
     # save_dir = '/CODIGOS_TESIS/T2/trained_models/Udiffusive/v1_50epoch_gen_att/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_50epoch'
+    model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_50epoch/'
     # model_dir='/CODIGOS_TESIS/T2/trained_models/Udiffusive'
     training_epochs = 50#10
     model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
@@ -396,7 +387,8 @@ def main():
     for simu in range(1,num_samples+1):
         simu_name = "simu" + str(simu).zfill(5)
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
-        bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
+        # bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
+        bmode, grid_full=create_phantom_bmodes_att_conv(att_dir,simu_name, depth_ini, device, model)
         np.save(save_dir+simu_name+".npy", bmode)
         # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
         # extent=[-20,20,50,0]
