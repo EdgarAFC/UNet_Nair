@@ -3,8 +3,8 @@
 #SBATCh --nodes=1
 #SBATCH --partition=gamerpcs
 #SBATCH --nodelist=worker1
-#SBATCH --output="log_samp_gen.out"
+#SBATCH --output="log_mets.out"
 
 source /etc/profile.d/modules.sh
 module load ifsr-advpertbeamf/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_samples.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/mets.py
