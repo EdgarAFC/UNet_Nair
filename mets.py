@@ -145,14 +145,14 @@ def main():
     num_samples = 100
     for simu in range(1,num_samples+1):
         simu_name = "simu" + str(simu).zfill(5)
-        # filename=simu_name+".npy"
+        filename=simu_name+".npy"
 
         sub_row = []
 
         P = LoadData_nair2020(h5_dir='/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/',
                             simu_name=simu_name)
         sub_row.append(n_sample)
-        sub_row.append(int(simu[4:]))
+        sub_row.append(int(simu_name[4:]))
         r = P.radius
         cx = P.pos_lat
         cz = P.pos_ax
