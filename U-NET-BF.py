@@ -10,9 +10,12 @@ import PIL
 from PIL import Image
 #
 from datetime import datetime
-from model7_shift_scale import UNETv13
+from model_diff import UNETv13
 
 import torch.nn.functional as func
+
+import guided_diffusion_v3 as gd
+from model_diff import UNETv13
 
 TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
@@ -204,14 +207,14 @@ def main():
   device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
   print(device)
 
-  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_50epoch'
+  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch'
   # save_dir = '/CODIGOS_TESIS/T2/trained_models/UNet_difusiva/v1_50epoch'
   if not os.path.exists(save_dir):
     os.mkdir(save_dir)
 
   # Training hyperparameters
   batch_size = 4  # 4 for testing, 16 for training
-  n_epoch = 50
+  n_epoch = 300
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
   # Define the model and train with scheduler
@@ -270,7 +273,7 @@ def main():
     # write_to_file(ep)
     # write_to_file(datetime.now())
 
-    if ep % 5 == 0 or ep == int(n_epoch) or ep == 1:
+    if ep % 20 == 0 or ep == int(n_epoch) or ep == 1:
       # checkpoint = {'state_dict' : nn_model.state_dict(), 'optimizer': optimizer_unet.state_dict()}
       # save_checkpoint(checkpoint,save_dir+f"/model_{ep}.pth")
       torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
