@@ -214,7 +214,7 @@ def main():
 
   # Training hyperparameters
   batch_size = 4  # 4 for testing, 16 for training
-  n_epoch = 300
+  n_epoch = 400
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
   # Define the model and train with scheduler
@@ -236,7 +236,7 @@ def main():
     print(i, x.shape,y.shape)
     if i==9: break
 
-  trained_epochs = 0
+  trained_epochs = 300
   if trained_epochs > 0:
     nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
     # load_checkpoint(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))
