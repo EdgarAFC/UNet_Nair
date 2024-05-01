@@ -2,7 +2,7 @@
 #SBATCH --gpus-per-node=1
 #SBATCh --nodes=1
 #SBATCH --partition=gamerpcs
-#SBATCH --nodelist=worker1
+#SBATCH --nodelist=worker2
 #SBATCH --output="log_model_std.out"
 
 source /etc/profile.d/modules.sh
