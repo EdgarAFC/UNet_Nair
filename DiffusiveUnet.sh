@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load ifsr-advpertbeamf/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_samples.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/mets.py
