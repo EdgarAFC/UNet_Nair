@@ -673,7 +673,7 @@ def main():
     # phantom_dir = '/CODIGOS_TESIS/T2/phantom_data'
 
     # save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epochs/gen_test/'
-    save_dir = '/mnt/nfs/efernandez/generated_samples/DAS/gen_test/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
     # save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_50epoch_gen_att/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
