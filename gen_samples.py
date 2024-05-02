@@ -12,7 +12,7 @@ import copy
 
 import torch
 
-from model7_shift_scale import UNETv13
+from model_diff import UNETv13
 import guided_diffusion_v3 as gd
 from matplotlib import pyplot as plt
 
