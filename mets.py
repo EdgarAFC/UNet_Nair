@@ -148,6 +148,7 @@ def main():
 
     for simu in dir_test:
         simu_name = simu[:-4]
+        filename=simu_name+".npy"
 
         sub_row = []
 
