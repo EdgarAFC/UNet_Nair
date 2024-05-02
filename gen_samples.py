@@ -687,7 +687,7 @@ def main():
 
     depth_ini=30
 
-    num_samples = 5
+    num_samples = 500
 
     # inclusion_shape = 'triangle'
     # h5name = "inclusion_%s.h5" % inclusion_shape
@@ -699,29 +699,12 @@ def main():
 
     phantom_names=["IS_L11-4v_data1_RF.h5","IS_L11-4v_data2_RF.h5","IS_L11-4v_data3_RF.h5","IS_L11-4v_data4_RF.h5"]
 
-    # for simu in range(1,num_samples+1):
-    #     simu_name = "simu" + str(simu).zfill(5)
-    #     # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
-    #     bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
-    #     # bmode, grid_full=create_phantom_bmodes_att_conv(att_dir,simu_name, depth_ini, device, model)
-    #     # bmode, _ = make_bimg_das1(att_dir, simu_name, device=device)
-    #     np.save(save_dir+simu_name+".npy", bmode)
-    #     # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
-    #     extent=[-20,20,50,0]
-    #     plt.figure(figsize=(9, 3))
-    #     # plt.subplot(1, 5, 1)
-    #     plt.imshow(bmode, cmap="gray", vmin=-60, vmax=0, extent=extent, origin="upper")
-    #     plt.colorbar()
-    #     plt.title('V7')
-    #     plt.show()
-
-    for simu in dir_test:
-        simu_name = simu[:-4]
+    for simu in range(1,num_samples+1):
+        simu_name = "simu" + str(simu).zfill(5)
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
         # bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
         # bmode, grid_full=create_phantom_bmodes_att_conv(att_dir,simu_name, depth_ini, device, model)
-        bmode, _ = make_bimg_das1(sim_dir, simu_name, device=device)
-        print(bmode.shape)
+        bmode, _ = make_bimg_das1(att_dir, simu_name, device=device)
         np.save(save_dir+simu_name+".npy", bmode)
         # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
         # extent=[-20,20,50,0]
@@ -731,6 +714,23 @@ def main():
         # plt.colorbar()
         # plt.title('V7')
         # plt.show()
+
+    # for simu in dir_test:
+    #     simu_name = simu[:-4]
+    #     # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
+    #     # bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
+    #     # bmode, grid_full=create_phantom_bmodes_att_conv(att_dir,simu_name, depth_ini, device, model)
+    #     bmode, _ = make_bimg_das1(sim_dir, simu_name, device=device)
+    #     print(bmode.shape)
+    #     np.save(save_dir+simu_name+".npy", bmode)
+    #     # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
+    #     # extent=[-20,20,50,0]
+    #     # plt.figure(figsize=(9, 3))
+    #     # # plt.subplot(1, 5, 1)
+    #     # plt.imshow(bmode, cmap="gray", vmin=-60, vmax=0, extent=extent, origin="upper")
+    #     # plt.colorbar()
+    #     # plt.title('V7')
+    #     # plt.show()
 
     
 
