@@ -675,17 +675,17 @@ def main():
     # phantom_dir = '/CODIGOS_TESIS/T2/phantom_data'
 
     # save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_pha/'
-    # save_dir = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
-    save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_pha/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/DAS/gen_pha/'
+    # save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_pha/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch/'
-    # model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
-    training_epochs = 380#10
-    model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
-    model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
-    diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
+    # model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch/'
+    # # model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
+    # training_epochs = 380#10
+    # model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
+    # model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
+    # diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
 
     depth_ini=30
 
@@ -721,8 +721,8 @@ def main():
         simu_name = simu[:-4]
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
         # bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
-        bmode, grid_full=create_phantom_bmodes_att_conv(sim_dir,simu_name, depth_ini, device, model)
-        # bmode, _ = make_bimg_das1(sim_dir, simu_name, device=device)
+        # bmode, grid_full=create_phantom_bmodes_att_conv(sim_dir,simu_name, depth_ini, device, model)
+        bmode, _ = make_bimg_das1(sim_dir, simu_name, device=device)
         # bmode, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model,diffusion)
         print(bmode.shape)
         np.save(save_dir+simu_name+".npy", bmode)
