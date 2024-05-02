@@ -228,7 +228,7 @@ def main():
     diff_met.append(diff_gcnr)
     diff_met.append(diff_snr)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/test'
 
     np.save(save_dir+"/met_das_test.npy", np.array(das_met))
     # np.save(save_dir+"/met_7.npy", np.array(model7_met))
