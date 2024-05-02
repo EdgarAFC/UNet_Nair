@@ -12,7 +12,7 @@ import copy
 
 import torch
 
-from model7_shift_scale import UNETv13
+from model_diff import UNETv13
 import guided_diffusion_v3 as gd
 from matplotlib import pyplot as plt
 
@@ -300,6 +300,7 @@ def create_phantom_shape_conv(h5_dir, h5_name, simu_name, depth_ini, device, mod
 def create_phantom_bmodes_att_conv(h5_dir, simu_name, depth_ini, device, model):
     # depth_ini = get_data_from_name(h5name)
     P = LoadData_nair2020(h5_dir, simu_name)
+    P,_,_=makeAberration(P, fwhm=2, rms_strength=30, seed=50)
     max_value = np.max(np.abs(np.array([P.idata, P.qdata])))
     P.idata = P.idata / max_value
     P.qdata = P.qdata / max_value
@@ -632,7 +633,7 @@ def makeAberration(P, fwhm, rms_strength, seed):
 def make_bimg_das1(h5_dir, simu_name, device):
 
     P = LoadData_nair2020(h5_dir, simu_name)
-    # P,_,_=makeAberration(P, fwhm=2, rms_strength=30, seed=50)
+    P,_,_=makeAberration(P, fwhm=2, rms_strength=30, seed=50)
     # P = LoadData_phantomLIM_ATSmodel539(h5_dir=h5_dir, h5_name=simu_name)
     norm_value = np.max((np.abs(P.idata), np.abs(P.qdata)))
     P.idata = P.idata / norm_value
@@ -673,14 +674,14 @@ def main():
     # shape_dir = '/CODIGOS_TESIS/T2/shape'
     # phantom_dir = '/CODIGOS_TESIS/T2/phantom_data'
 
-    save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_pha/'
+    # save_dir = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_pha/'
     # save_dir = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
-    # save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_pha/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    # model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch/'
-    model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
+    model_dir='/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch/'
+    # model_dir='/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
     training_epochs = 380#10
     model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
     model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
@@ -720,9 +721,9 @@ def main():
         simu_name = simu[:-4]
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
         # bmode, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model,diffusion)
-        # bmode, grid_full=create_phantom_bmodes_att_conv(att_dir,simu_name, depth_ini, device, model)
+        bmode, grid_full=create_phantom_bmodes_att_conv(sim_dir,simu_name, depth_ini, device, model)
         # bmode, _ = make_bimg_das1(sim_dir, simu_name, device=device)
-        bmode, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model,diffusion)
+        # bmode, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model,diffusion)
         print(bmode.shape)
         np.save(save_dir+simu_name+".npy", bmode)
         # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
