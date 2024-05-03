@@ -186,7 +186,7 @@ def main():
         #testing model v9
         test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_pha/'
         bmode_output = np.load(test_std+filename).squeeze()
-        bmode_output = (bmode_output + 1) * 30 - 60
+        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
         sub_row.append(contrast)
         sub_row.append(cnr)
@@ -200,7 +200,7 @@ def main():
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_pha/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
-        bmode_output = (bmode_output + 1) * 30 - 60
+        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
         sub_row.append(contrast)
         sub_row.append(cnr)
