@@ -130,7 +130,7 @@ def main():
     diff_gcnr=[]
     diff_snr=[]
 
-    num_samples = 2500
+    num_samples = 500
 
     sim_dir = '/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
@@ -142,17 +142,17 @@ def main():
 
     n_sample = 0
 
-    # for simu in range(1,num_samples+1):
-        # simu_name = "simu" + str(simu).zfill(5)
+    for simu in range(1,num_samples+1):
+        simu_name = "simu" + str(simu).zfill(5)
         # filename=simu_name+".npy"
 
-    for simu in dir_test:
-        simu_name = simu[:-4]
+    # for simu in dir_test:
+    #     simu_name = simu[:-4]
         filename=simu_name+".npy"
 
         sub_row = []
 
-        P = LoadData_nair2020(h5_dir=sim_dir,
+        P = LoadData_nair2020(h5_dir=att_dir,
                             simu_name=simu_name)
         
         depths = np.linspace(30*1e-3, 80*1e-3, num=800)
@@ -170,7 +170,7 @@ def main():
         sub_row.append(P.c)
 
         #testing model DAS
-        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_pha/'
+        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
         bmode_output = np.load(test_DAS+filename).squeeze()
         bmode_output = np.clip(bmode_output, a_min=-60, a_max=0)
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
@@ -184,7 +184,7 @@ def main():
         das_snr.append(snr)
 
         #testing model v9
-        test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_pha/'
+        test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
         bmode_output = np.load(test_std+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
@@ -198,7 +198,7 @@ def main():
         std_snr.append(snr)
 
         #testing model udiff
-        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_pha/'
+        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr = compute_metrics(cx, cz, r, bmode_output, grid)
@@ -229,16 +229,16 @@ def main():
     diff_met.append(diff_gcnr)
     diff_met.append(diff_snr)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/pha'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att'
 
-    np.save(save_dir+"/met_das_pha.npy", np.array(das_met))
+    np.save(save_dir+"/met_das_att.npy", np.array(das_met))
     # np.save(save_dir+"/met_7.npy", np.array(model7_met))
-    np.save(save_dir+"/met_std_pha.npy", np.array(std_met))
+    np.save(save_dir+"/met_std_att.npy", np.array(std_met))
     # np.save(save_dir+"/met_10.npy", np.array(model10_met))
-    np.save(save_dir+"/met_diff_pha.npy", np.array(diff_met))
+    np.save(save_dir+"/met_diff_att.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/pha_models.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_models.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
