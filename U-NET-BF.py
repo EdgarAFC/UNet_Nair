@@ -218,7 +218,7 @@ def main():
   train_loader = DataLoader(train_dataset, batch_size = batch_size, shuffle=True)
 
   # nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
-  nn_model = UNET(2,64,1)
+  nn_model = UNET(2,64,1).to(device)
   print("Num params: ", sum(p.numel() for p in nn_model.parameters() if p.requires_grad))
   optimizer_unet = torch.optim.Adam(nn_model.parameters(), lr=l_rate)
 
