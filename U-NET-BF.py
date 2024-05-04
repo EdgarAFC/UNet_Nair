@@ -80,108 +80,103 @@ class ONEPW_Dataset(Dataset):
 
         return rf_image, onepw_img
 
-# class Conv_3_k(nn.Module):
-#   def __init__(self, channels_in, channels_out):
-#     super().__init__()
-#     self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1)
-#   def forward(self, x):
-#     return self.conv1(x)  
+class Conv_3_k(nn.Module):
+  def __init__(self, channels_in, channels_out):
+    super().__init__()
+    self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1)
+  def forward(self, x):
+    return self.conv1(x)  
   
-# class Double_Conv(nn.Module):
-#   '''
-#   Double convolution block for U-Net
-#   '''
-#   def __init__(self, channels_in, channels_out):
-#     super().__init__()
-#     self.double_conv = nn.Sequential(
-#                        Conv_3_k(channels_in, channels_out),
-#                        nn.BatchNorm2d(channels_out),
-#                        nn.ReLU(),
+class Double_Conv(nn.Module):
+  '''
+  Double convolution block for U-Net
+  '''
+  def __init__(self, channels_in, channels_out):
+    super().__init__()
+    self.double_conv = nn.Sequential(
+                       Conv_3_k(channels_in, channels_out),
+                       nn.BatchNorm2d(channels_out),
+                       nn.ReLU(),
 
-#                        Conv_3_k(channels_out, channels_out),
-#                        nn.BatchNorm2d(channels_out),
-#                        nn.ReLU(),
-#                         )
-#   def forward(self, x):
-#     return self.double_conv(x)
+                       Conv_3_k(channels_out, channels_out),
+                       nn.BatchNorm2d(channels_out),
+                       nn.ReLU(),
+                        )
+  def forward(self, x):
+    return self.double_conv(x)
     
-# class Down_Conv(nn.Module):
-#   '''
-#   Down convolution part
-#   maxPool + double convolution
-#   '''
-#   def __init__(self, channels_in, channels_out):
-#     super().__init__()
-#     self.encoder = nn.Sequential(
-#                   nn.MaxPool2d(2,2), #size 2x2 and stride 2 para dividir la imagen en 2
-#                   Double_Conv(channels_in, channels_out)
-#                   )
-#   def forward(self, x):
-#     return self.encoder(x)
+class Down_Conv(nn.Module):
+  '''
+  Down convolution part
+  maxPool + double convolution
+  '''
+  def __init__(self, channels_in, channels_out):
+    super().__init__()
+    self.encoder = nn.Sequential(
+                  nn.MaxPool2d(2,2), #size 2x2 and stride 2 para dividir la imagen en 2
+                  Double_Conv(channels_in, channels_out)
+                  )
+  def forward(self, x):
+    return self.encoder(x)
 
-# class Up_Conv(nn.Module):
-#   '''
-#   Up convolution part
-#   '''
-#   def __init__(self, channels_in, channels_out):
-#     super().__init__()
-#     self.upsample_layer = nn.Sequential(
-#                           nn.Upsample(scale_factor = 2, mode ='bicubic'),
-#                           nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
-#                           )
-#     self.decoder = Double_Conv(channels_in, channels_out)
+class Up_Conv(nn.Module):
+  '''
+  Up convolution part
+  '''
+  def __init__(self, channels_in, channels_out):
+    super().__init__()
+    self.upsample_layer = nn.Sequential(
+                          nn.Upsample(scale_factor = 2, mode ='bicubic'),
+                          nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
+                          )
+    self.decoder = Double_Conv(channels_in, channels_out)
 
-#   def forward(self, x1, x2):
-#     '''
-#     x1 - upsampled volumen
-#     x2 - volume from down sample to concatenate
-#     '''
-#     x1 = self.upsample_layer(x1)
-#     x  = torch.cat([x2, x1], dim=1)
-#     return self.decoder(x)
+  def forward(self, x1, x2):
+    '''
+    x1 - upsampled volumen
+    x2 - volume from down sample to concatenate
+    '''
+    x1 = self.upsample_layer(x1)
+    x  = torch.cat([x2, x1], dim=1)
+    return self.decoder(x)
   
-# class UNET(nn.Module):
-#   '''
-#   UNET model
-#   '''
-#   def __init__(self, channels_in, channels, num_classes):
-#     super().__init__()
-#     self.first_conv = Double_Conv(channels_in, channels) #64, 800, 128
-#     self.down_conv1 = Down_Conv(channels, 2*channels) #128, 400, 64
-#     self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
-#     self.down_conv3 = Down_Conv(4*channels, 8*channels) #512, 100, 16
+class UNET(nn.Module):
+  '''
+  UNET model
+  '''
+  def __init__(self, channels_in, channels, num_classes):
+    super().__init__()
+    self.first_conv = Double_Conv(channels_in, channels) #64, 800, 128
+    self.down_conv1 = Down_Conv(channels, 2*channels) #128, 400, 64
+    self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
+    self.down_conv3 = Down_Conv(4*channels, 8*channels) #512, 100, 16
     
-#     self.middle_conv = Down_Conv(8*channels, 16*channels) #1024, 50, 8
+    self.middle_conv = Down_Conv(8*channels, 16*channels) #1024, 50, 8
 
-#     self.up_conv1 = Up_Conv(16*channels, 8*channels)
-#     self.up_conv2 = Up_Conv(8*channels, 4*channels)
-#     self.up_conv3 = Up_Conv(4*channels, 2*channels)
-#     self.up_conv4 = Up_Conv(2*channels, channels)
+    self.up_conv1 = Up_Conv(16*channels, 8*channels)
+    self.up_conv2 = Up_Conv(8*channels, 4*channels)
+    self.up_conv3 = Up_Conv(4*channels, 2*channels)
+    self.up_conv4 = Up_Conv(2*channels, channels)
 
-#     self.last_conv =  nn.Sequential(
-#                       nn.Conv2d(channels, num_classes, kernel_size = 1, stride=1),
-#                       nn.Sigmoid()
-#                       )
+    self.last_conv =  nn.Sequential(
+                      nn.Conv2d(channels, num_classes, kernel_size = 1, stride=1),
+                      nn.Sigmoid()
+                      )
     
-#   def forward(self, x):
-#     x1= self.first_conv(x)
-#     x2 = self.down_conv1(x1)
-#     x3 = self.down_conv2(x2)
-#     x4 = self.down_conv3(x3)
+  def forward(self, x):
+    x1= self.first_conv(x)
+    x2 = self.down_conv1(x1)
+    x3 = self.down_conv2(x2)
+    x4 = self.down_conv3(x3)
 
-#     x5 = self.middle_conv(x4)
+    x5 = self.middle_conv(x4)
 
-#     u1_bf = self.up_conv1(x5, x4)
-#     u2_bf = self.up_conv2(u1_bf, x3)
-#     u3_bf = self.up_conv3(u2_bf, x2)
-#     u4_bf = self.up_conv4(u3_bf, x1)
+    u1_bf = self.up_conv1(x5, x4)
+    u2_bf = self.up_conv2(u1_bf, x3)
+    u3_bf = self.up_conv3(u2_bf, x2)
+    u4_bf = self.up_conv4(u3_bf, x1)
 
-#     u1_seg = self.up_conv1(x5, x4)
-#     u2_seg = self.up_conv2(u1_seg, x3)
-#     u3_seg = self.up_conv3(u2_seg, x2)
-#     u4_seg = self.up_conv4(u3_seg, x1)
-
-#     return self.last_conv(u4_bf), self.last_conv(u4_seg)
+    return self.last_conv(u4_bf)
 
 # '''
 # Checkpoint
@@ -207,21 +202,23 @@ def main():
   device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
   print(device)
 
-  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch'
+  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_Nair/'
+  # save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch'
   # save_dir = '/CODIGOS_TESIS/T2/trained_models/UNet_difusiva/v1_50epoch'
   if not os.path.exists(save_dir):
     os.mkdir(save_dir)
 
   # Training hyperparameters
   batch_size = 4  # 4 for testing, 16 for training
-  n_epoch = 400
+  n_epoch = 100
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
   # Define the model and train with scheduler
-  train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
+  train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ENH_PATH)
   train_loader = DataLoader(train_dataset, batch_size = batch_size, shuffle=True)
 
-  nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
+  # nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
+  nn_model = UNET(2,64,1)
   print("Num params: ", sum(p.numel() for p in nn_model.parameters() if p.requires_grad))
   optimizer_unet = torch.optim.Adam(nn_model.parameters(), lr=l_rate)
 
@@ -273,7 +270,7 @@ def main():
     # write_to_file(ep)
     # write_to_file(datetime.now())
 
-    if ep % 20 == 0 or ep == int(n_epoch) or ep == 1:
+    if ep % 10 == 0 or ep == int(n_epoch) or ep == 1:
       # checkpoint = {'state_dict' : nn_model.state_dict(), 'optimizer': optimizer_unet.state_dict()}
       # save_checkpoint(checkpoint,save_dir+f"/model_{ep}.pth")
       torch.save(nn_model.state_dict(), save_dir+f"/model_{ep}.pth")
