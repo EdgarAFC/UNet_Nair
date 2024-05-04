@@ -233,7 +233,7 @@ def main():
     print(i, x.shape,y.shape)
     if i==9: break
 
-  trained_epochs = 300
+  trained_epochs = 0
   if trained_epochs > 0:
     nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
     # load_checkpoint(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))
