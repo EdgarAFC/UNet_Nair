@@ -6,5 +6,5 @@
 #SBATCH --output="log_met.out"
 
 source /etc/profile.d/modules.sh
-module load students_env/1.0
+module load jesus/1.0
 srun python /mnt/nfs/efernandez/projects/UNet_Nair/U-NET-BF.py
