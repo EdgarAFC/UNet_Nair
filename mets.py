@@ -241,7 +241,7 @@ def main():
     diff_met.append(diff_snr)
     diff_met.append(diff_decay)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att2'
 
     np.save(save_dir+"/met_das_att.npy", np.array(das_met))
     # np.save(save_dir+"/met_7.npy", np.array(model7_met))
@@ -250,7 +250,7 @@ def main():
     np.save(save_dir+"/met_diff_att.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_models.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_models2.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
