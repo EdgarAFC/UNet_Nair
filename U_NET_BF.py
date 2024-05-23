@@ -126,7 +126,8 @@ class Up_Conv(nn.Module):
   def __init__(self, channels_in, channels_out):
     super().__init__()
     self.upsample_layer = nn.Sequential(
-                          nn.Upsample(scale_factor = 2, mode ='bicubic'),
+                          # nn.Upsample(scale_factor = 2, mode ='bicubic'),
+                          nn.ConvTranspose2d(channels_out, channels_in, kernel_size=2, stride=2),
                           nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
                           )
     self.decoder = Double_Conv(channels_in, channels_out)
@@ -209,7 +210,7 @@ def main():
     os.mkdir(save_dir)
 
   # Training hyperparameters
-  batch_size = 4  # 4 for testing, 16 for training
+  batch_size = 16  # 4 for testing, 16 for training
   n_epoch = 100
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
