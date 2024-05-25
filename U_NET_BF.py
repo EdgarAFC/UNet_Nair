@@ -83,7 +83,7 @@ class ONEPW_Dataset(Dataset):
 class Conv_3_k(nn.Module):
   def __init__(self, channels_in, channels_out):
     super().__init__()
-    self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1)
+    self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1, bias=False)
   def forward(self, x):
     return self.conv1(x)  
   
@@ -96,11 +96,11 @@ class Double_Conv(nn.Module):
     self.double_conv = nn.Sequential(
                        Conv_3_k(channels_in, channels_out),
                        nn.BatchNorm2d(channels_out),
-                       nn.ReLU(),
+                       nn.ReLU(inplace=True),
 
                        Conv_3_k(channels_out, channels_out),
                        nn.BatchNorm2d(channels_out),
-                       nn.ReLU(),
+                       nn.ReLU(inplace=True),
                         )
   def forward(self, x):
     return self.double_conv(x)
@@ -127,8 +127,8 @@ class Up_Conv(nn.Module):
     super().__init__()
     self.upsample_layer = nn.Sequential(
                           # nn.Upsample(scale_factor = 2, mode ='bicubic'),
-                          nn.ConvTranspose2d(channels_out, channels_in, kernel_size=2, stride=2),
-                          nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
+                          nn.ConvTranspose2d(channels_in/2, channels_in/2, kernel_size=2, stride=2),
+                          # nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
                           )
     self.decoder = Double_Conv(channels_in, channels_out)
 
@@ -152,12 +152,12 @@ class UNET(nn.Module):
     self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
     self.down_conv3 = Down_Conv(4*channels, 8*channels) #512, 100, 16
     
-    self.middle_conv = Down_Conv(8*channels, 16*channels) #1024, 50, 8
+    self.middle_conv = Down_Conv(8*channels, 8*channels) #512, 50, 8
 
-    self.up_conv1 = Up_Conv(16*channels, 8*channels)
-    self.up_conv2 = Up_Conv(8*channels, 4*channels)
-    self.up_conv3 = Up_Conv(4*channels, 2*channels)
-    self.up_conv4 = Up_Conv(2*channels, channels)
+    self.up_conv1 = Up_Conv(16*channels, 4*channels)
+    self.up_conv2 = Up_Conv(8*channels, 2*channels)
+    self.up_conv3 = Up_Conv(4*channels, 1*channels)
+    self.up_conv4 = Up_Conv(2*channels, 1*channels)
 
     self.last_conv =  nn.Sequential(
                       nn.Conv2d(channels, num_classes, kernel_size = 1, stride=1),
