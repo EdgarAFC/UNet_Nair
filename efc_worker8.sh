@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/U-NET-BF_w8.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/U_NET_BF_w8.py
