@@ -79,7 +79,7 @@ class ONEPW_Dataset(Dataset):
     
 class Conv_3_k(nn.Module):
   def __init__(self, channels_in, channels_out):
-    super(Conv_3_k,self).__init__()
+    super().__init__()
     self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1, bias=False)
   def forward(self, x):
     return self.conv1(x)  
@@ -89,7 +89,7 @@ class Double_Conv(nn.Module):
   Double convolution block for U-Net
   '''
   def __init__(self, channels_in, channels_out):
-    super(Double_Conv,self).__init__()
+    super().__init__()
     self.double_conv = nn.Sequential(
                        Conv_3_k(channels_in, channels_out),
                        nn.BatchNorm2d(channels_out),
@@ -108,7 +108,7 @@ class Down_Conv(nn.Module):
   maxPool + double convolution
   '''
   def __init__(self, channels_in, channels_out):
-    super(Down_Conv,self).__init__()
+    super().__init__()
     self.encoder = nn.Sequential(
                   nn.MaxPool2d(2,2), #size 2x2 and stride 2 para dividir la imagen en 2
                   Double_Conv(channels_in, channels_out)
@@ -121,7 +121,7 @@ class Up_Conv(nn.Module):
   Up convolution part
   '''
   def __init__(self, channels_in, channels_out):
-    super(Up_Conv, self).__init__()
+    super().__init__()
     self.upsample_layer = nn.Sequential(
                           # nn.Upsample(scale_factor = 2, mode ='bicubic'),
                           nn.ConvTranspose2d(int(channels_in/2), int(channels_in/2), kernel_size=2, stride=2),
@@ -143,7 +143,7 @@ class UNET(nn.Module):
   UNET model
   '''
   def __init__(self, channels_in, channels, num_classes):
-    super(UNET, self).__init__()
+    super().__init__()
     self.first_conv = Double_Conv(channels_in, channels) #64, 800, 128
     self.down_conv1 = Down_Conv(channels, 2*channels) #128, 400, 64
     self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
