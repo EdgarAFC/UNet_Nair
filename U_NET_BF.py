@@ -21,6 +21,8 @@ TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
 TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
+# TRAIN_PATH = '/TESIS/DATOS_1/rf_train/'
+# TRAIN_ENH_PATH= '/TESIS/DATOS_1/enh_train/'
 
 # ###############################
 # file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_w1.txt", "w")
@@ -82,7 +84,7 @@ class ONEPW_Dataset(Dataset):
 
 class Conv_3_k(nn.Module):
   def __init__(self, channels_in, channels_out):
-    super().__init__()
+    super(Conv_3_k, self).__init__()
     self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1, bias=False)
   def forward(self, x):
     return self.conv1(x)  
@@ -92,7 +94,7 @@ class Double_Conv(nn.Module):
   Double convolution block for U-Net
   '''
   def __init__(self, channels_in, channels_out):
-    super().__init__()
+    super(Double_Conv,self).__init__()
     self.double_conv = nn.Sequential(
                        Conv_3_k(channels_in, channels_out),
                        nn.BatchNorm2d(channels_out),
@@ -111,7 +113,7 @@ class Down_Conv(nn.Module):
   maxPool + double convolution
   '''
   def __init__(self, channels_in, channels_out):
-    super().__init__()
+    super(Down_Conv,self).__init__()
     self.encoder = nn.Sequential(
                   nn.MaxPool2d(2,2), #size 2x2 and stride 2 para dividir la imagen en 2
                   Double_Conv(channels_in, channels_out)
@@ -124,12 +126,9 @@ class Up_Conv(nn.Module):
   Up convolution part
   '''
   def __init__(self, channels_in, channels_out):
-    super().__init__()
-    self.upsample_layer = nn.Sequential(
-                          # nn.Upsample(scale_factor = 2, mode ='bicubic'),
-                          nn.ConvTranspose2d(channels_in/2, channels_in/2, kernel_size=2, stride=2),
-                          # nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
-                          )
+    super(Up_Conv,self).__init__()
+    self.upsample_layer = nn.ConvTranspose2d(channels_in/2, channels_in/2, kernel_size=2, stride=2),
+                          
     self.decoder = Double_Conv(channels_in, channels_out)
 
   def forward(self, x1, x2):
@@ -146,7 +145,7 @@ class UNET(nn.Module):
   UNET model
   '''
   def __init__(self, channels_in, channels, num_classes):
-    super().__init__()
+    super(UNET, self).__init__()
     self.first_conv = Double_Conv(channels_in, channels) #64, 800, 128
     self.down_conv1 = Down_Conv(channels, 2*channels) #128, 400, 64
     self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
@@ -204,6 +203,8 @@ def main():
   print(device)
 
   save_dir = '/mnt/nfs/efernandez/trained_models/UNet_Nair/'
+  # save_dir='/CODIGOS_TESIS/T2/trained_models/Unet_Nair/'
+
   # save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch'
   # save_dir = '/CODIGOS_TESIS/T2/trained_models/UNet_difusiva/v1_50epoch'
   if not os.path.exists(save_dir):
@@ -239,6 +240,7 @@ def main():
     nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
     # load_checkpoint(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))
     loss_arr = np.load(save_dir+f"/loss_{trained_epochs}.npy").tolist()  # From last model
+  
   else:
     loss_arr = []
 
