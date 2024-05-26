@@ -197,7 +197,7 @@ def main():
   device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
   print(device)
 
-  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_Nair/'
+  save_dir = '/mnt/nfs/efernandez/trained_models/UNet_Nair_ONEPW/'
   # save_dir='/CODIGOS_TESIS/T2/trained_models/Unet_Nair/'
 
   # save_dir = '/mnt/nfs/efernandez/trained_models/UNet_difusiva/v1_300epoch'
@@ -211,7 +211,7 @@ def main():
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
   # Define the model and train with scheduler
-  train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ENH_PATH)
+  train_dataset = ONEPW_Dataset(TRAIN_PATH, TRAIN_ONEPW_PATH)
   train_loader = DataLoader(train_dataset, batch_size = batch_size, shuffle=True)
 
   # nn_model = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
