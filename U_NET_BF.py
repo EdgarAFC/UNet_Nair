@@ -2,20 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import torch
-from torch import nn, optim
-from torchvision import transforms as T
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch import nn
+from torch.utils.data import DataLoader, Dataset
 #
 import PIL
 from PIL import Image
 #
 from datetime import datetime
-from model_diff import UNETv13
-
 import torch.nn.functional as func
-
-import guided_diffusion_v3 as gd
-from model_diff import UNETv13
 
 TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
 TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
@@ -84,7 +78,7 @@ class ONEPW_Dataset(Dataset):
     
 class Conv_3_k(nn.Module):
   def __init__(self, channels_in, channels_out):
-    super().__init__()
+    super(Conv_3_k,self).__init__()
     self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1, bias=False)
   def forward(self, x):
     return self.conv1(x)  
