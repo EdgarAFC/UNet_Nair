@@ -206,7 +206,7 @@ def main():
     os.mkdir(save_dir)
 
   # Training hyperparameters
-  batch_size = 16  # 4 for testing, 16 for training
+  batch_size = 8  # 4 for testing, 16 for training
   n_epoch = 100
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
