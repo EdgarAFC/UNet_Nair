@@ -81,10 +81,10 @@ class ONEPW_Dataset(Dataset):
         # enh_img = enh_img * (new_max - new_min) + new_min
 
         return rf_image, onepw_img
-
+    
 class Conv_3_k(nn.Module):
   def __init__(self, channels_in, channels_out):
-    super(Conv_3_k, self).__init__()
+    super().__init__()
     self.conv1 = nn.Conv2d(channels_in, channels_out, kernel_size=3, stride=1, padding=1, bias=False)
   def forward(self, x):
     return self.conv1(x)  
@@ -126,9 +126,12 @@ class Up_Conv(nn.Module):
   Up convolution part
   '''
   def __init__(self, channels_in, channels_out):
-    super(Up_Conv,self).__init__()
-    self.upsample_layer = nn.ConvTranspose2d(channels_in/2, channels_in/2, kernel_size=2, stride=2),
-                          
+    super(Up_Conv, self).__init__()
+    self.upsample_layer = nn.Sequential(
+                          # nn.Upsample(scale_factor = 2, mode ='bicubic'),
+                          nn.ConvTranspose2d(int(channels_in/2), int(channels_in/2), kernel_size=2, stride=2),
+                          # nn.Conv2d(channels_in, channels_in//2, kernel_size=1, stride=1)              
+                          )
     self.decoder = Double_Conv(channels_in, channels_out)
 
   def forward(self, x1, x2):
@@ -178,6 +181,7 @@ class UNET(nn.Module):
 
     return self.last_conv(u4_bf)
 
+
 # '''
 # Checkpoint
 # '''
@@ -212,7 +216,7 @@ def main():
 
   # Training hyperparameters
   batch_size = 16  # 4 for testing, 16 for training
-  n_epoch = 150
+  n_epoch = 100
   l_rate = 1e-5  # changing from 1e-5 to 1e-6, new lr 1e-7
 
   # Define the model and train with scheduler
@@ -235,7 +239,7 @@ def main():
     print(i, x.shape,y.shape)
     if i==9: break
 
-  trained_epochs = 100
+  trained_epochs = 0
   if trained_epochs > 0:
     nn_model.load_state_dict(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))  # From last model
     # load_checkpoint(torch.load(save_dir+f"/model_{trained_epochs}.pth", map_location=device))
