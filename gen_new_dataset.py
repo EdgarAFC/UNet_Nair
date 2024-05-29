@@ -12,13 +12,6 @@ import copy
 
 import torch
 
-from model_diff import UNETv13
-
-from U_NET_BF_w8 import UNET
-
-import guided_diffusion_v3 as gd
-from matplotlib import pyplot as plt
-
 from torch.nn.functional import grid_sample
 from scipy import signal
 from scipy.interpolate import interp1d
@@ -138,46 +131,6 @@ class ShapeVariationDataLoader(PlaneWaveData):
             # self.pos_lat = np.array(f['lat_pos']).item()
             # self.pos_ax = np.array(f['ax_pos']).item()
         super().validate()
-
-def create_gaussian_diffusion(
-        *,
-        steps=1000,
-        learn_sigma=False,
-        sigma_small=False,
-        noise_schedule="linear",
-        use_kl=False,
-        predict_xstart=False,
-        rescale_timesteps=False,
-        rescale_learned_sigmas=False,
-        timestep_respacing="",
-):
-    betas = gd.get_named_beta_schedule(noise_schedule, steps)
-    if use_kl:
-        loss_type = gd.LossType.RESCALED_KL
-    elif rescale_learned_sigmas:
-        loss_type = gd.LossType.RESCALED_MSE
-    else:
-        loss_type = gd.LossType.MSE
-    if not timestep_respacing:
-        timestep_respacing = [steps]
-    return gd.SpacedDiffusion(
-        use_timesteps=gd.space_timesteps(steps, timestep_respacing),
-        betas=betas,
-        model_mean_type=(
-            gd.ModelMeanType.EPSILON if not predict_xstart else gd.ModelMeanType.START_X
-        ),
-        model_var_type=(
-            (
-                gd.ModelVarType.FIXED_LARGE
-                if not sigma_small
-                else gd.ModelVarType.FIXED_SMALL
-            )
-            if not learn_sigma
-            else gd.ModelVarType.LEARNED_RANGE
-        ),
-        loss_type=loss_type,
-        rescale_timesteps=rescale_timesteps,
-    )
 
 def make_pixel_grid_from_pos(x_pos, z_pos):
     zz, xx = np.meshgrid(z_pos, x_pos, indexing="ij") # 'ij' -> rows: z, columns: x
