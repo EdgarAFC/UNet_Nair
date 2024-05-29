@@ -648,7 +648,7 @@ def main():
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    for id in range(4001, 5001):
+    for id in range(3001, 4001):
         simu_name = 'simu' + str(id).zfill(5)   #Ejemplo simu00001
 
         bmode, _ = make_bimg_das1(pw75_dir, simu_name, device=device)
