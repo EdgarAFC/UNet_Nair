@@ -644,11 +644,11 @@ def main():
     pw75_dir = '/mnt/nfs/efernandez/datasets/data75PW/'
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DAS_01PW/'
-    save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_train/'
+    save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_gen/'
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    for id in range(1001, 2001):
+    for id in range(2001, 3001):
         simu_name = 'simu' + str(id).zfill(5)   #Ejemplo simu00001
 
         bmode, _ = make_bimg_das1(pw75_dir, simu_name, device=device)
