@@ -107,7 +107,7 @@ def make_pixel_grid_from_pos(x_pos, z_pos):
 def main():
 
     # field names
-    fields = ['#','id', 'r', 'cx', 'cz', 'c', 'das_contrast', 'das_cnr', 'das_gcnr', 'das_snr', 'das_decay', 'std_contrast', 'std_cnr', 'std_gcnr', 'std_snr', 'std_decay', 'diff_contrast', 'diff_cnr', 'diff_gcnr', 'diff_snr', 'diff_decay']
+    fields = ['#','id', 'r', 'cx', 'cz', 'c', 'das_contrast', 'das_cnr', 'das_gcnr', 'das_snr', 'das_decay', 'das_contrast_att','std_contrast', 'std_cnr', 'std_gcnr', 'std_snr', 'std_decay', 'std_contrast_att','diff_contrast', 'diff_cnr', 'diff_gcnr', 'diff_snr', 'diff_decay', 'diff_contrast_att']
 
     rows = []
 
@@ -120,18 +120,21 @@ def main():
     das_gcnr=[]
     das_snr=[]
     das_decay=[]
+    das_contrast_att=[]
 
     std_contrast=[]
     std_cnr=[]
     std_gcnr=[]
     std_snr=[]
     std_decay=[]
+    std_contrast_att=[]
 
     diff_contrast=[]
     diff_cnr=[]
     diff_gcnr=[]
     diff_snr=[]
     diff_decay=[]
+    diff_contrast_att=[]
 
     num_samples = 500
 
@@ -172,53 +175,83 @@ def main():
         sub_row.append(P.pos_ax)
         sub_row.append(P.c)
 
+        columns_id = []
+        for i in range(len(grid[:,:,0][1])):
+            id_col = grid[:,:,0][1][i]
+            print("Id_col", id_col)
+            
+            if id_col < (cx-r) or id_col > (cx+r):
+                columns_id.append(i)
+
+        number_columns = 50
+        found_region = 0
+        region = []
+        while found_region == 0:
+            i = 0   
+            for id in range(number_columns-1):
+                if columns_id[i:i+number_columns][id] == columns_id[i:i+number_columns][id+1] -1:
+                    found_region = 1
+                    region.append(columns_id[i:i+number_columns][id])
+                else:
+                    found_region = 0
+                    region = []
+            i = i+1
+        region.append(columns_id[i:i+number_columns][id])
+
+
         #testing model DAS
         test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
         bmode_output = np.load(test_DAS+filename).squeeze()
         bmode_output = np.clip(bmode_output, a_min=-60, a_max=0)
-        contrast, cnr, gcnr, snr, decay_param = compute_metrics(cx, cz, r, bmode_output, grid)
+        contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
         sub_row.append(gcnr)
         sub_row.append(snr)
         sub_row.append(decay_param)
+        sub_row.append(contrast_att)
         das_contrast.append(contrast)
         das_cnr.append(cnr)
         das_gcnr.append(gcnr)
         das_snr.append(snr)
         das_decay.append(decay_param)
+        das_contrast_att.append(contrast_att)
 
         #testing model v9
         test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
         bmode_output = np.load(test_std+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
-        contrast, cnr, gcnr, snr, decay_param = compute_metrics(cx, cz, r, bmode_output, grid)
+        contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
         sub_row.append(gcnr)
         sub_row.append(snr)
         sub_row.append(decay_param)
+        sub_row.append(contrast_att)
         std_contrast.append(contrast)
         std_cnr.append(cnr)
         std_gcnr.append(gcnr)
         std_snr.append(snr)
         std_decay.append(decay_param)
+        std_contrast_att.append(contrast_att)
 
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
-        contrast, cnr, gcnr, snr, decay_param = compute_metrics(cx, cz, r, bmode_output, grid)
+        contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
         sub_row.append(gcnr)
         sub_row.append(snr)
         sub_row.append(decay_param)
+        sub_row.append(contrast_att)
         diff_contrast.append(contrast)
         diff_cnr.append(cnr)
         diff_gcnr.append(gcnr)
         diff_snr.append(snr)
         diff_decay.append(decay_param)
+        diff_contrast.append(contrast_att)
 
         rows.append(sub_row)
         n_sample = n_sample +1
@@ -228,29 +261,32 @@ def main():
     das_met.append(das_gcnr)
     das_met.append(das_snr)
     das_met.append(das_decay)
+    das_met.append(das_contrast_att)
 
     std_met.append(std_contrast)
     std_met.append(std_cnr)
     std_met.append(std_gcnr)
     std_met.append(std_snr)
     std_met.append(std_decay)
+    std_met.append(std_contrast_att)
 
     diff_met.append(diff_contrast)
     diff_met.append(diff_cnr)
     diff_met.append(diff_gcnr)
     diff_met.append(diff_snr)
     diff_met.append(diff_decay)
+    diff_met.append(diff_contrast_att)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att2'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_fin'
 
-    np.save(save_dir+"/met_das_att.npy", np.array(das_met))
+    np.save(save_dir+"/met_das_att_fin.npy", np.array(das_met))
     # np.save(save_dir+"/met_7.npy", np.array(model7_met))
-    np.save(save_dir+"/met_std_att.npy", np.array(std_met))
+    np.save(save_dir+"/met_std_att_fin.npy", np.array(std_met))
     # np.save(save_dir+"/met_10.npy", np.array(model10_met))
-    np.save(save_dir+"/met_diff_att.npy", np.array(diff_met))
+    np.save(save_dir+"/met_diff_att_fin.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_models2.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_fin.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
