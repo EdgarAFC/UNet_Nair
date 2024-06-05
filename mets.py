@@ -178,12 +178,12 @@ def main():
         columns_id = []
         for i in range(len(grid[:,:,0][1])):
             id_col = grid[:,:,0][1][i]
-            print("Id_col", id_col)
+            # print("Id_col", id_col)
             
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        number_columns = 50
+        number_columns = 25
         found_region = 0
         region = []
         while found_region == 0:
@@ -197,6 +197,8 @@ def main():
                     region = []
             i = i+1
         region.append(columns_id[i:i+number_columns][id])
+
+        print('Region: ', region)
 
 
         #testing model DAS
