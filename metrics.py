@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
 
 # Metricas: Contraste, gcnr, SNR
 def compute_metrics(cx, cz, r, bmode_output, grid, region):
