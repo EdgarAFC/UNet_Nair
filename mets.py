@@ -196,23 +196,26 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        write_to_file('Columns available' + str(columns_id)),
-        number_columns = 15
+        # write_to_file('Columns available' + str(columns_id)),
+        number_columns = 50
         found_region = 0
         region = []
-        i = 0 
+        i = 0
+        id = 0
         while found_region == 0:  
-            for id in range(number_columns-1):
+            while id < number_columns-1:
                 if columns_id[i:i+number_columns][id] == (columns_id[i:i+number_columns][id+1] -1):
                     found_region = 1
                     region.append(columns_id[i:i+number_columns][id])
+                    id = id + 1
                 else:
                     found_region = 0
-                    write_to_file('no corresponde')
+                    # print('no corresponde', i)
                     region = []
                     i = i+1
+                    id = 0
             
-        region.append(columns_id[i:i+number_columns][id+1])
+        region.append(columns_id[i:i+number_columns][id])
 
         write_to_file(region)
 
