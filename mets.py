@@ -200,7 +200,7 @@ def main():
         found_region = 0
         region = []
         i = 0 
-        while found_region == 0:  
+        while found_region == 0 and len(region)<(number_columns-1):  
             for id in range(number_columns-1):
                 if columns_id[i:i+number_columns][id] == (columns_id[i:i+number_columns][id+1] -1):
                     found_region = 1
