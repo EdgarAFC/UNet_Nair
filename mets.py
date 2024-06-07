@@ -196,7 +196,7 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        write_to_file('Columns available' + columns_id)
+        write_to_file('Columns available' + str(columns_id)),
         number_columns = 15
         found_region = 0
         region = []
