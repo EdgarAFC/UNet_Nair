@@ -101,8 +101,8 @@ def contrast_att(region, array):
     # Define the dimensions of the rectangles
     row_start1 = 300         # starting row for the first rectangle
     row_end1 = 400         # ending row for the first rectangle
-    width = 4             # width of the rectangles
-    column_step = 5       # step size for moving the columns
+    width = 2             # width of the rectangles
+    column_step = 2       # step size for moving the columns
 
     # Loop through the array to select the rectangles
     for col_start in range(region[0], region[-1] - width + 1, column_step):

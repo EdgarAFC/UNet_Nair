@@ -196,11 +196,12 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        number_columns = 20
+        write_to_file('Columns available' + columns_id)
+        number_columns = 15
         found_region = 0
         region = []
         i = 0 
-        while found_region == 0 and len(region)==(number_columns-1):  
+        while found_region == 0:  
             for id in range(number_columns-1):
                 if columns_id[i:i+number_columns][id] == (columns_id[i:i+number_columns][id+1] -1):
                     found_region = 1
