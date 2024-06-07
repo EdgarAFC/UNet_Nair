@@ -199,8 +199,8 @@ def main():
         number_columns = 25
         found_region = 0
         region = []
-        while found_region == 0:
-            i = 0   
+        i = 0 
+        while found_region == 0:  
             for id in range(number_columns-1):
                 if columns_id[i:i+number_columns][id] == (columns_id[i:i+number_columns][id+1] -1):
                     found_region = 1
@@ -209,8 +209,9 @@ def main():
                     found_region = 0
                     write_to_file('no corresponde')
                     region = []
-            i = i+1
-        region.append(columns_id[i:i+number_columns][id])
+                    i = i+1
+            
+        region.append(columns_id[i:i+number_columns][id+1])
 
         write_to_file(region)
 
