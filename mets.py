@@ -207,6 +207,7 @@ def main():
                     region.append(columns_id[i:i+number_columns][id])
                 else:
                     found_region = 0
+                    write_to_file('no corresponde')
                     region = []
             i = i+1
         region.append(columns_id[i:i+number_columns][id])
