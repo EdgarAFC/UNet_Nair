@@ -196,7 +196,7 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        number_columns = 25
+        number_columns = 20
         found_region = 0
         region = []
         i = 0 
