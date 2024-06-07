@@ -11,6 +11,15 @@ from scipy.signal import hilbert
 
 from metrics import compute_metrics
 
+###############################
+file_loss = open("/mnt/nfs/efernandez/projects/UNet_Nair/log_metrics_att.txt", "w")
+file_loss.close()
+################################
+def write_to_file(input): 
+    with open("/mnt/nfs/efernandez/projects/UNet_Nair/log_metrics_att.txt", "a") as textfile: 
+        textfile.write(str(input) + "\n") 
+    textfile.close()
+
 class PlaneWaveData:
     """ A template class that contains the plane wave data.
 
@@ -156,6 +165,10 @@ def main():
     #     simu_name = simu[:-4]
         filename=simu_name+".npy"
 
+        write_to_file('File')
+        write_to_file(filename)
+        write_to_file('---')
+
         sub_row = []
 
         P = LoadData_nair2020(h5_dir=att_dir,
@@ -189,7 +202,7 @@ def main():
         while found_region == 0:
             i = 0   
             for id in range(number_columns-1):
-                if columns_id[i:i+number_columns][id] == columns_id[i:i+number_columns][id+1] -1:
+                if columns_id[i:i+number_columns][id] == (columns_id[i:i+number_columns][id+1] -1):
                     found_region = 1
                     region.append(columns_id[i:i+number_columns][id])
                 else:
@@ -198,8 +211,7 @@ def main():
             i = i+1
         region.append(columns_id[i:i+number_columns][id])
 
-        print('Region: ', region)
-
+        write_to_file(region)
 
         #testing model DAS
         test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
@@ -218,8 +230,9 @@ def main():
         das_snr.append(snr)
         das_decay.append(decay_param)
         das_contrast_att.append(contrast_att)
+        write_to_file('DAS: ' + str(contrast_att))
 
-        #testing model v9
+        #testing standard training
         test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
         bmode_output = np.load(test_std+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
@@ -236,6 +249,7 @@ def main():
         std_snr.append(snr)
         std_decay.append(decay_param)
         std_contrast_att.append(contrast_att)
+        write_to_file('STD: ' + str(contrast_att))
 
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
@@ -253,7 +267,8 @@ def main():
         diff_gcnr.append(gcnr)
         diff_snr.append(snr)
         diff_decay.append(decay_param)
-        diff_contrast.append(contrast_att)
+        diff_contrast_att.append(contrast_att)
+        write_to_file('DIFF: ' + str(contrast_att))
 
         rows.append(sub_row)
         n_sample = n_sample +1
