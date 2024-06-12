@@ -3,8 +3,8 @@
 #SBATCh --nodes=1
 #SBATCH --partition=thinkstation-p360
 #SBATCH --nodelist=worker9
-#SBATCH --output="log_metrics_final.out"
+#SBATCH --output="log_worker9.out"
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/mets.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_new_dataset.py

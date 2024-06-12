@@ -16,6 +16,9 @@ from torch.nn.functional import grid_sample
 from scipy import signal
 from scipy.interpolate import interp1d
 
+# from matplotlib import pyplot as plt
+
+
 PI = 3.14159265359
 
 class PlaneWaveData:
@@ -143,6 +146,41 @@ def roi_channel_data(P, laterals, depths):
     nLats, nDepths = len(laterals), len(depths)
     depth_samples = 2 * (depths / P.c) * P.fs
     tzero_samples = int(P.time_zero * P.fs)
+
+    donwsample_depths = np.zeros((nDepths, P.idata.shape[1], 2))
+    for idx in np.arange(P.idata.shape[1]):
+        iplane = np.concatenate((np.zeros(tzero_samples), P.idata[0, idx, :]))  # fill with zeros
+        qplane = np.concatenate((np.zeros(tzero_samples), P.qdata[0, idx, :]))  # fill with zeros
+
+        data_axis = np.arange(len(iplane))
+
+        func_i = interpolate.interp1d(data_axis, iplane, kind='slinear')
+        func_q = interpolate.interp1d(data_axis, qplane, kind='slinear')
+
+        donwsample_depths[:, idx, 0] = func_i(depth_samples)
+        donwsample_depths[:, idx, 1] = func_q(depth_samples)
+
+    XDC_elements_laterals = np.linspace(P.grid_xlims[0], P.grid_xlims[-1], P.idata.shape[1])
+    donwsample_total = np.zeros((nDepths, nLats, 2))
+    for idx in np.arange(nDepths):
+        iplane = donwsample_depths[idx, :, 0]
+        qplane = donwsample_depths[idx, :, 1]
+
+        func_i = interpolate.interp1d(XDC_elements_laterals, iplane, kind='slinear')
+        func_q = interpolate.interp1d(XDC_elements_laterals, qplane, kind='slinear')
+
+        donwsample_total[idx, :, 0] = func_i(laterals)
+        donwsample_total[idx, :, 1] = func_q(laterals)
+
+    # iq = np.sqrt(input_Id[:, :, 0] ** 2 + input_Id[:, :, 1] ** 2)
+    return donwsample_total
+
+def roi_channel_data2(P, laterals, depths, angle):
+
+    nLats, nDepths = len(laterals), len(depths)
+
+    depth_samples = 2 * (depths / P.c) * P.fs
+    tzero_samples = int(P.time_zero[angle] * P.fs)
 
     donwsample_depths = np.zeros((nDepths, P.idata.shape[1], 2))
     for idx in np.arange(P.idata.shape[1]):
@@ -570,6 +608,21 @@ class LoadData_phantomLIM_ATSmodel539(PlaneWaveData):
         assert self.time_zero.ndim == 1 and self.time_zero.size == nangles
         print("Dataset successfully loaded")
 
+def downsample_channel_data2(H, laterals, depths, angle, device):
+    norm_value = np.max((np.abs(H.idata[angle]), np.abs(H.qdata[angle])))
+    H.idata = H.idata / norm_value
+    H.qdata = H.qdata / norm_value
+    # 0.002, 0.052
+    # x, depth_samples, tzero_samples = create_input_Id(H,npoints, depths)  # x: npointsx128x2
+    x = roi_channel_data2(H,laterals=laterals, depths=depths, angle=angle)  # x: npointsx128x2
+    # norm_value_x = np.max(np.abs(x))
+    # print(f'nair_input_corrected: -> norm_value_x: {norm_value_x}')
+
+    # x = x/norm_value_x
+    # x = torch.from_numpy(x)[None, :].permute(0, 3, 1, 2).to(torch.float).to(device)
+    # x: 1, 2, npoints, 128
+    return x
+
 def makeAberration(P, fwhm, rms_strength, seed):
     Fs = P.fs
     pitch = (P.ele_pos[1, 0] - P.ele_pos[0, 0]) * 1000  # pitch in mm
@@ -628,6 +681,9 @@ def make_bimg_das1(h5_dir, simu_name, device):
     id_angle = range(P.angles.shape[0])
 
     dasNet = DAS_PW(P, grid_full, ang_list=id_angle,device=device)
+
+    print(P.idata[75].shape)
+
     bimg, env, _, _, _ = dasNet((P.idata, P.qdata), accumulate=False)
     bimg = bimg.detach().cpu().numpy()
     env = env.detach().cpu().numpy()
@@ -644,35 +700,70 @@ def main():
     pw75_dir = '/mnt/nfs/efernandez/datasets/data75PW/'
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DAS_01PW/'
-    save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_gen/'
-    if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
+    # save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_gen/'
+    # if not os.path.exists(save_dir):
+    #     os.mkdir(save_dir)
 
-    for id in range(3001, 4001):
-        simu_name = 'simu' + str(id).zfill(5)   #Ejemplo simu00001
+    # for id in range(1001, 2001):
+    #     simu_name = 'simu' + str(id).zfill(5)   #Ejemplo simu00001
 
-        bmode, _ = make_bimg_das1(pw75_dir, simu_name, device=device)
-        bmode = np.clip(bmode, a_min=-60, a_max=0)
-        bmode = (bmode+60)/60
-        np.save(save_dir+simu_name+".npy", bmode)
+    #     bmode, _ = make_bimg_das1(pw75_dir, simu_name, device=device)
+    #     bmode = np.clip(bmode, a_min=-60, a_max=0)
+    #     bmode = (bmode+60)/60
+    #     np.save(save_dir+simu_name+".npy", bmode)
 
-        # extent=[-20,20,50,0]
-        # plt.figure(figsize=(7, 3))
-        # plt.subplot(1,2,1)
-        # print('Shape', bmode.shape)
-        # plt.imshow(bmode, cmap="gray", vmin=0, vmax=1, extent=extent, origin="upper")
-        # plt.colorbar()
-        # plt.title('75pw')
+    #     extent=[-20,20,50,0]
+    #     plt.figure(figsize=(7, 3))
+    #     plt.subplot(1,2,1)
+    #     print('Shape', bmode.shape)
+    #     plt.imshow(bmode, cmap="gray", vmin=0, vmax=1, extent=extent, origin="upper")
+    #     plt.colorbar()
+    #     plt.title('75pw')
 
-        # image_base = np.load('/TESIS/DATOS_TESIS2/target_from_raw/'+simu_name+'.npy' )
-        # # image_base = (image_base - 1)*60
-        # extent=[-20,20,50,0]
-        # # plt.figure(figsize=(9, 3))
-        # plt.subplot(1,2,2)
-        # plt.imshow(image_base, cmap="gray", vmin=0, vmax=1, extent=extent, origin="upper")
-        # plt.colorbar()
-        # plt.title('1pw')
-        # plt.show()
+    #     image_base = np.load('/TESIS/DATOS_TESIS2/target_from_raw/'+simu_name+'.npy' )
+    #     # image_base = (image_base - 1)*60
+    #     extent=[-20,20,50,0]
+    #     # plt.figure(figsize=(9, 3))
+    #     plt.subplot(1,2,2)
+    #     plt.imshow(image_base, cmap="gray", vmin=0, vmax=1, extent=extent, origin="upper")
+    #     plt.colorbar()
+    #     plt.title('1pw')
+    #     plt.show()
+
+    # save_dirs = ['/TESIS/DATOS_1/75pw_rf/neg_16/',
+    #              '/TESIS/DATOS_1/75pw_rf/neg_7/',
+    #              '/TESIS/DATOS_1/75pw_rf/zero/',
+    #              '/TESIS/DATOS_1/75pw_rf/pos_7/',
+    #              '/TESIS/DATOS_1/75pw_rf/pos_16/']
+    
+    save_dirs = ['/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_16neg/',
+                 '/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_8neg/',
+                 '/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_zero/',
+                 '/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_8pos/',
+                 '/mnt/nfs/efernandez/datasets/dataMULTPW/MULTPW_train/angle_16pos/',
+                ]
+
+    for id in range(1, 3201):
+        for angle_id, angle in enumerate([0,18,37,56,74]):
+            simu_name = 'simu' + str(id).zfill(5)   #Ejemplo simu00001
+            print('Getting data from', simu_name)
+
+            depth_ini = 30
+
+            P = LoadData_nair2020(pw75_dir, simu_name)
+
+            laterals = np.linspace(P.grid_xlims[0], P.grid_xlims[-1], num=128)
+            depths = np.linspace(depth_ini, depth_ini + 50, num=800) / 1000
+
+            channel_data_phantom = downsample_channel_data2(copy.deepcopy(P),
+                                                    laterals=laterals,
+                                                    depths=depths,
+                                                    angle=angle,
+                                                    device=device)
+            
+            print('SHAPE DATA: ', channel_data_phantom.shape)
+            np.save(save_dirs[angle_id]+simu_name+".npy", channel_data_phantom)
+
 
 if __name__ == '__main__':
     main()
