@@ -187,7 +187,7 @@ if __name__ == '__main__':
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
 
-    model_gen, _, _, _, _ = load_gen_model(model_dir=os.path.join(this_dir),
+    model_gen, _, _, _, _ = load_gen_model(model_dir=this_dir,
                                              epoch='last',
                                              num_downs=5,
                                              device=device)
