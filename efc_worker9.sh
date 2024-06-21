@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_new_dataset.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_WANG.py
