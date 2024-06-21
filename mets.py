@@ -123,7 +123,7 @@ def main():
                 columns_id.append(i)
 
         write_to_file('Columns available' + str(columns_id)),
-        number_columns = 40
+        number_columns = 30
         found_region = 0
         region = []
         i = 0
