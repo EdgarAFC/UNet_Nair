@@ -183,7 +183,7 @@ if __name__ == '__main__':
 
     ###################CLUSTER####################
     #DATA DIRS
-    sim_dir = '/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
+    sim_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
 
     path = '/mnt/nfs/efernandez/datasets/dataRF/RF_test/'
