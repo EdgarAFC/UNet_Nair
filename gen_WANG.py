@@ -9,7 +9,7 @@ import pickle
 
 import copy
 
-from gen_samples_v2_local import LoadData_nair2020, downsample_channel_data
+from gen_samples import LoadData_nair2020, downsample_channel_data
 
 class UnetSkipConnectionBlock(nn.Module):
     """Defines the Unet submodule with skip connection.
