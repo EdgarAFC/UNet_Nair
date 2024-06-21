@@ -126,12 +126,16 @@ def load_gen_model(model_dir=None, epoch=None, num_downs=8, norm_layer=nn.BatchN
         elif isinstance(epoch, str):
             generator_filename = os.path.join(model_dir, 'model_gen_%s.t7' % epoch)
             print(generator_filename)
+
             discriminator_filename = os.path.join(model_dir, 'model_disc_%s.t7' % epoch)
             print(discriminator_filename)
+
             gen_history_filename = os.path.join(model_dir, 'history_gen_%s.pkl' % epoch)
             print(gen_history_filename)
+
             genL1_history_filename = os.path.join(model_dir, 'history_genL1_%s.pkl' % epoch)
             print(genL1_history_filename)
+
             disc_history_filename = os.path.join(model_dir, 'history_disc_%s.pkl' % epoch)
             print(disc_history_filename)
 
@@ -184,7 +188,8 @@ if __name__ == '__main__':
     path = '/mnt/nfs/efernandez/datasets/dataRF/RF_test/'
     dir_test = os.listdir(path)
     #MODEL DIR
-    this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/models/wang/'
+    # this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/models/wang/'
+    this_dir = '/mnt/nfs/efernandez/generated_samples/WANG/wang/'
     #SAVE_SAMPLES
     #data_with_attenuation
     save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
