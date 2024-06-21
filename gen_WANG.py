@@ -125,10 +125,15 @@ def load_gen_model(model_dir=None, epoch=None, num_downs=8, norm_layer=nn.BatchN
             print(f"Loading models {epoch}...")
         elif isinstance(epoch, str):
             generator_filename = os.path.join(model_dir, 'model_gen_%s.t7' % epoch)
+            print(generator_filename)
             discriminator_filename = os.path.join(model_dir, 'model_disc_%s.t7' % epoch)
+            print(discriminator_filename)
             gen_history_filename = os.path.join(model_dir, 'history_gen_%s.pkl' % epoch)
+            print(gen_history_filename)
             genL1_history_filename = os.path.join(model_dir, 'history_genL1_%s.pkl' % epoch)
+            print(genL1_history_filename)
             disc_history_filename = os.path.join(model_dir, 'history_disc_%s.pkl' % epoch)
+            print(disc_history_filename)
 
             print(f"Loading models {epoch}...")
         else:
