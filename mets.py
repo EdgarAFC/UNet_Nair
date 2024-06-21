@@ -83,12 +83,12 @@ def main():
     # path = '/TESIS/DATOS_1/rf_test/'
     dir_test = sorted(os.listdir(path))
 
-    for simu in range(1,num_samples+1):
-        simu_name = "simu" + str(simu).zfill(5)
-        # filename=simu_name+".npy"
+    # for simu in range(1,num_samples+1):
+    #     simu_name = "simu" + str(simu).zfill(5)
+    #     # filename=simu_name+".npy"
 
-    # for simu in dir_test:
-    #     simu_name = simu[:-4]
+    for simu in dir_test:
+        simu_name = simu[:-4]
         filename=simu_name+".npy"
 
         write_to_file('File')
@@ -97,7 +97,7 @@ def main():
 
         sub_row = []
 
-        P = LoadData_nair2020(h5_dir=att_dir,
+        P = LoadData_nair2020(h5_dir=sim_dir,
                             simu_name=simu_name)
         
         depths = np.linspace(30*1e-3, 80*1e-3, num=800)
@@ -146,7 +146,7 @@ def main():
         write_to_file(region)
 
         #testing model DAS
-        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
+        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_test/'
         bmode_output = np.load(test_DAS+filename).squeeze()
         bmode_output = np.clip(bmode_output, a_min=-60, a_max=0)
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -165,7 +165,7 @@ def main():
         write_to_file('DAS: ' + str(contrast_att))
 
         #testing standard training
-        test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
+        test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_test/'
         bmode_output = np.load(test_std+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -184,7 +184,7 @@ def main():
         write_to_file('STD: ' + str(contrast_att))
 
         #testing model udiff
-        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
+        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_test/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -203,7 +203,7 @@ def main():
         write_to_file('DIFF: ' + str(contrast_att))
 
         #testing model wang
-        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
+        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/gen_test/'
         bmode_output = np.load(dir_model_WANG+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -252,18 +252,18 @@ def main():
     wang_met.append(wang_decay)
     wang_met.append(wang_contrast_att)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_TESIS_v1'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_v1'
 
-    np.save(save_dir+"/met_das_att_TESIS_v1.npy", np.array(das_met))
+    np.save(save_dir+"/met_das_test_TESIS_v1.npy", np.array(das_met))
     # np.save(save_dir+"/met_7.npy", np.array(model7_met))
-    np.save(save_dir+"/met_std_att_TESIS_v1.npy", np.array(std_met))
+    np.save(save_dir+"/met_std_test_TESIS_v1.npy", np.array(std_met))
     # np.save(save_dir+"/met_10.npy", np.array(model10_met))
-    np.save(save_dir+"/met_diff_att_TESIS_v1.npy", np.array(diff_met))
+    np.save(save_dir+"/met_diff_test_TESIS_v1.npy", np.array(diff_met))
 
-    np.save(save_dir+"/met_wang_att_TESIS_v1.npy", np.array(diff_met))
+    np.save(save_dir+"/met_wang_test_TESIS_v1.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_TESIS_v1.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_v1.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
