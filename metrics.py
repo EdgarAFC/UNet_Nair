@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.optimize import curve_fit
+# from matplotlib import pyplot as plt
+# import torch
 
 # Metricas: Contraste, gcnr, SNR
 def compute_metrics(cx, cz, r, bmode_output, grid, region):
@@ -124,6 +126,23 @@ def contrast_att(region, array):
 
         contrast_value = contrast(roi2, roi1)
         contrast_n.append(contrast_value)
+
+    #     extent=[-20,20,50,0]
+
+    #     # Plot the original array with rectangles showing the ROIs
+    #     # plt.subplot(1, 3, 1)
+
+    #     bimg = 20 * torch.log10(torch.from_numpy(array) + torch.tensor(1.0*1e-25))
+    #     bimg = bimg - torch.max(bimg)
+    #     plt.imshow(bimg, cmap="gray", vmin=-60, vmax=0,extent=extent, origin="upper")
+    #     plt.title(f"Proposed model\n diffusive training 1PW")
+    #     plt.gca().add_patch(plt.Rectangle((col_start*(40/128)-20, row_start1/16), width*(40/128), (row_end1 - row_start1)/16, edgecolor='r', facecolor='none'))
+    #     plt.gca().add_patch(plt.Rectangle((col_start*(40/128)-20, row_start2/16), width*(40/128), (row_end2 - row_start2)/16, edgecolor='b', facecolor='none'))
+
+    #     # plt.show()
+
+    # plt.show()
+        
 
     contrast_final = sum(contrast_n)/len(contrast_n)
 
