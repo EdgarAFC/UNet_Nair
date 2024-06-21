@@ -122,8 +122,8 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        # write_to_file('Columns available' + str(columns_id)),
-        number_columns = 50
+        write_to_file('Columns available' + str(columns_id)),
+        number_columns = 40
         found_region = 0
         region = []
         i = 0
