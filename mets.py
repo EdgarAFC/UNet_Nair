@@ -73,6 +73,7 @@ def main():
     wang_contrast_att=[]
 
     num_samples = 500
+    n_sample = 0
 
     sim_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
@@ -103,7 +104,7 @@ def main():
         laterals = np.linspace(P.grid_xlims[0], P.grid_xlims[-1], num=128)
         grid = make_pixel_grid_from_pos(x_pos=laterals, z_pos=depths)
 
-        sub_row.append(num_samples)
+        sub_row.append(n_sample)
         sub_row.append(int(simu_name[4:]))
         r = P.radius
         cx = P.pos_lat
