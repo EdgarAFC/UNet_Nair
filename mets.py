@@ -167,7 +167,7 @@ def main():
         #testing standard training
         test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_test/'
         bmode_output = np.load(test_std+filename).squeeze()
-        # bmode_output = (bmode_output + 1) * 30 - 60
+        bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
@@ -186,7 +186,7 @@ def main():
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_test/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
-        # bmode_output = (bmode_output + 1) * 30 - 60
+        bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
@@ -205,7 +205,6 @@ def main():
         #testing model wang
         dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/gen_test/'
         bmode_output = np.load(dir_model_WANG+filename).squeeze()
-        # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
         sub_row.append(cnr)
