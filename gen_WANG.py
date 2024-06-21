@@ -185,6 +185,7 @@ if __name__ == '__main__':
     #DATA DIRS
     sim_dir = '/nfs/privileged/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
+
     path = '/mnt/nfs/efernandez/datasets/dataRF/RF_test/'
     dir_test = os.listdir(path)
     #MODEL DIR
@@ -192,7 +193,8 @@ if __name__ == '__main__':
     this_dir = '/mnt/nfs/efernandez/generated_samples/WANG/wang/'
     #SAVE_SAMPLES
     #data_with_attenuation
-    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
+    # save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_test/'
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
@@ -204,14 +206,14 @@ if __name__ == '__main__':
 
     model_gen.eval()
 
-    # for simu in dir_test:
-    #     simu_name = simu[:-4]
-    num_samples = 500
-    for simu in range(1,num_samples+1):
-        simu_name = "simu" + str(simu).zfill(5)
+    for simu in dir_test:
+        simu_name = simu[:-4]
+    # num_samples = 500
+    # for simu in range(1,num_samples+1):
+    #     simu_name = "simu" + str(simu).zfill(5)
         print(simu_name)
         ## Code to read channel data (2, 800, 128)
-        P = LoadData_nair2020(att_dir, simu_name)
+        P = LoadData_nair2020(sim_dir, simu_name)
         # P,_,_=makeAberration(P, fwhm=1, rms_strength=50, seed=50)
         max_value = np.max(np.abs(np.array([P.idata, P.qdata])))
         P.idata = P.idata / max_value
