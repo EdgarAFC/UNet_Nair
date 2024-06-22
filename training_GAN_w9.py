@@ -366,8 +366,8 @@ def test(gen, disc, val_loader, loss_fn):
     gen.eval()
     disc.eval()
     with torch.no_grad():
-        for batch_idx, samples in enumerate(val_loader):
-            channel_data, real_bmode = samples['input'], samples['target']
+        for batch_idx, data in enumerate(val_loader):
+            channel_data, real_bmode = data[0], data[1]
             channel_data, real_bmode = channel_data.to(device), real_bmode.to(device)
             N, C, H, W = channel_data.size()
             z = torch.randn(N, 1, H, W).to(device)
