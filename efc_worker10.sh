@@ -2,8 +2,8 @@
 #SBATCH --gpus-per-node=1
 #SBATCh --nodes=1
 #SBATCH --partition=thinkstation-p360
-#SBATCH --nodelist=worker10
-#SBATCH --output="log_worker10.out"
+#SBATCH --nodelist=worker9
+#SBATCH --output="log_worker9.out"
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
