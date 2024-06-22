@@ -431,7 +431,7 @@ if __name__ == '__main__':
     train_loader, val_loader = splitDataloader(train_dataset,
                                                batch_size=(BATCH_SIZE, BATCH_SIZE),
                                                train_val_split=0.8,
-                                               indices_dir=os.path.join(this_dir, "models"),
+                                               indices_dir=this_dir,
                                                previous_indices=False)
 
     gen, disc, gen_history, genL1_history, disc_history = load_wang_model(model_dir=save_model_dir,

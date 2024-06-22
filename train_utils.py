@@ -27,13 +27,13 @@ def splitDataloader(full_dataset, batch_size, train_val_split, indices_dir, prev
         train_indices = train_dataset.indices
         val_indices = val_dataset.indices
 
-        # # Save the indices for future use
-        # os.makedirs(os.path.join(indices_dir), exist_ok=True)
-        # with open(os.path.join(indices_dir, 'train_indices.pkl'), 'wb') as f:
-        #     pickle.dump(train_indices, f)
-        # with open(os.path.join(indices_dir, 'val_indices.pkl'), 'wb') as f:
-        #     pickle.dump(val_indices, f)
-        # print('Random split. Indices correctly saved')
+        # Save the indices for future use
+        os.makedirs(os.path.join(indices_dir), exist_ok=True)
+        with open(os.path.join(indices_dir, 'train_indices.pkl'), 'wb') as f:
+            pickle.dump(train_indices, f)
+        with open(os.path.join(indices_dir, 'val_indices.pkl'), 'wb') as f:
+            pickle.dump(val_indices, f)
+        print('Random split. Indices correctly saved')
 
     # Create subsets for training and validation sets based on the provided indices
     train_dataset = Subset(full_dataset, train_indices)
