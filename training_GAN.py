@@ -410,7 +410,7 @@ if __name__ == '__main__':
     ########################################################
     load_epoch = -1     # set to -1 to train from scratch
     last_epoch = 100
-    BATCH_SIZE = 32
+    BATCH_SIZE = 4
     ########################################################
     print('Device is: %s' % device)
     save_model_dir = os.path.join(this_dir)
