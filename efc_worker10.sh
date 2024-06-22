@@ -6,5 +6,5 @@
 #SBATCH --output="log_worker10.out"
 
 source /etc/profile.d/modules.sh
-module load students_env/1.0
-srun python /mnt/nfs/efernandez/projects/DDPM_model/training_GAN_w10.py
+module load jesus/1.0
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/training_GAN_w10.py
