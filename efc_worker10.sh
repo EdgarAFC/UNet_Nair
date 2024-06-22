@@ -3,7 +3,7 @@
 #SBATCh --nodes=1
 #SBATCH --partition=thinkstation-p360
 #SBATCH --nodelist=worker9
-#SBATCH --output="log_worker9.out"
+#SBATCH --output="log_worker10.out"
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
