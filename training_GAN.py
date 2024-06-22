@@ -15,17 +15,17 @@ import numpy as np
 # from src.models.unet.unet_model import *
 # from src.models.dataloaders.cystDataset import CystDatasetTUFFC_Wang
 
-# TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
-# TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
-# TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
+TRAIN_PATH = '/mnt/nfs/efernandez/datasets/dataRF/RF_train'
+TRAIN_ENH_PATH= '/mnt/nfs/efernandez/datasets/dataENH/ENH_train'
+TRAIN_ONEPW_PATH= '/mnt/nfs/efernandez/datasets/dataONEPW/ONEPW_train'
 
-TRAIN_PATH = '/TESIS/DATOS_1/rf_train'
-TRAIN_ENH_PATH= '/TESIS/DATOS_1/enh_train'
-TRAIN_ONEPW_PATH= '/TESIS/DATOS_TESIS2/onepw_train'
+# TRAIN_PATH = '/TESIS/DATOS_1/rf_train'
+# TRAIN_ENH_PATH= '/TESIS/DATOS_1/enh_train'
+# TRAIN_ONEPW_PATH= '/TESIS/DATOS_TESIS2/onepw_train'
 
-TEST_PATH = '/TESIS/DATOS_1/rf_test'
-TEST_ENH_PATH='/TESIS/DATOS_1/enh_test'
-TEST_ONEPW_PATH='/TESIS/DATOS_TESIS2/onepw_test'
+# TEST_PATH = '/TESIS/DATOS_1/rf_test'
+# TEST_ENH_PATH='/TESIS/DATOS_1/enh_test'
+# TEST_ONEPW_PATH='/TESIS/DATOS_TESIS2/onepw_test'
 
 
 class ONEPW_Dataset(Dataset):
@@ -404,13 +404,13 @@ if __name__ == '__main__':
     # this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/'
     # data_dir = '/mnt/workerXspace/isalazar/datasets/simulatedCystDataset/TUFFC'
 
-    this_dir = '/CODIGOS_TESIS/T2/wang/trained_models/L1_LOSS'
+    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/L1_LOSS/'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     ########################################################
     load_epoch = -1     # set to -1 to train from scratch
     last_epoch = 100
-    BATCH_SIZE = 2
+    BATCH_SIZE = 32
     ########################################################
     print('Device is: %s' % device)
     save_model_dir = os.path.join(this_dir)
