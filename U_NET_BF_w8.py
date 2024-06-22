@@ -122,7 +122,7 @@ class Up_Conv(nn.Module):
   '''
   def __init__(self, channels_in, channels_out):
     super().__init__()
-    self.upsample_layer = nn.ConvTranspose2d(channels_in//2, channels_in//2, kernel_size=2, stride=2)
+    self.upsample_layer = nn.ConvTranspose2d(channels_in, channels_in//2, kernel_size=2, stride=2)
     self.decoder = Double_Conv(channels_in, channels_out)
 
   def forward(self, x1, x2):
@@ -150,6 +150,45 @@ class UNET(nn.Module):
     self.up_conv1 = Up_Conv(16*channels, 4*channels)
     self.up_conv2 = Up_Conv(8*channels, 2*channels)
     self.up_conv3 = Up_Conv(4*channels, 1*channels)
+    self.up_conv4 = Up_Conv(2*channels, 1*channels)
+
+    self.last_conv =  nn.Sequential(
+                      nn.Conv2d(channels, num_classes, kernel_size = 1, stride=1),
+                      nn.Sigmoid()
+                      )
+    
+  def forward(self, x):
+    x1= self.first_conv(x)
+    x2 = self.down_conv1(x1)
+    x3 = self.down_conv2(x2)
+    x4 = self.down_conv3(x3)
+
+    x5 = self.middle_conv(x4)
+
+    u1_bf = self.up_conv1(x5, x4)
+    u2_bf = self.up_conv2(u1_bf, x3)
+    u3_bf = self.up_conv3(u2_bf, x2)
+    u4_bf = self.up_conv4(u3_bf, x1)
+
+    return self.last_conv(u4_bf)
+
+
+class UNET2(nn.Module):
+  '''
+  UNET model
+  '''
+  def __init__(self, channels_in, channels, num_classes):
+    super().__init__()
+    self.first_conv = Double_Conv(channels_in, channels) #64, 800, 128
+    self.down_conv1 = Down_Conv(channels, 2*channels) #128, 400, 64
+    self.down_conv2 = Down_Conv(2*channels, 4*channels) #256, 200, 32
+    self.down_conv3 = Down_Conv(4*channels, 8*channels) #512, 100, 16
+    
+    self.middle_conv = Down_Conv(8*channels, 16*channels) #1024, 50, 8
+
+    self.up_conv1 = Up_Conv(16*channels, 8*channels)
+    self.up_conv2 = Up_Conv(8*channels, 4*channels)
+    self.up_conv3 = Up_Conv(4*channels, 2*channels)
     self.up_conv4 = Up_Conv(2*channels, 1*channels)
 
     self.last_conv =  nn.Sequential(
