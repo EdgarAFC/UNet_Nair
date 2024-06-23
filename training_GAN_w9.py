@@ -8,7 +8,7 @@ from train_utils import splitDataloader, save_model, save_history, create_dir
 
 import torch.nn as nn
 
-from U_NET_BF_w8 import UNET
+from U_NET_BF_w8 import UNET2
 from torch.utils.data import DataLoader, Dataset
 import functools
 import numpy as np
@@ -141,7 +141,7 @@ def load_wang_model(model_dir=None, epoch=None, num_downs=8, norm_layer=nn.Batch
     #                                   norm_layer=norm_layer,
     #                                   use_dropout=False).to(device)
     
-    generator = UNET(3,64,1).to(device)
+    generator = UNET2(3,64,1).to(device)
 
     discriminator = Wang2020UnetDiscriminator(input_nc=3, # channel data(2) + real or fake bmode (1)
                                               ndf=64,
@@ -404,7 +404,7 @@ if __name__ == '__main__':
     # this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/'
     # data_dir = '/mnt/workerXspace/isalazar/datasets/simulatedCystDataset/TUFFC'
 
-    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/L1_LOSS/'
+    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/L1_LOSS_DEEP/'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     ########################################################
