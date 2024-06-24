@@ -12,6 +12,8 @@ from U_NET_BF_w8 import UNET2
 from torch.utils.data import DataLoader, Dataset
 import functools
 import numpy as np
+
+from model_diff import UNETv13
 # from src.models.unet.unet_model import *
 # from src.models.dataloaders.cystDataset import CystDatasetTUFFC_Wang
 
@@ -406,7 +408,7 @@ if __name__ == '__main__':
     # this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/'
     # data_dir = '/mnt/workerXspace/isalazar/datasets/simulatedCystDataset/TUFFC'
 
-    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/MSE_LOSS_DEEP/'
+    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/MSE_LOSS_udiff/'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     #
     ########################################################
