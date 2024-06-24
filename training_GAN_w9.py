@@ -145,7 +145,7 @@ def load_wang_model(model_dir=None, epoch=None, num_downs=8, norm_layer=nn.Batch
     
     # generator = UNETv13(3,64,1).to(device)
 
-    generator = UNETv13(in_channels=3,out_channels=1).to(device)
+    generator = UNETv13(in_channels=3,out_channels=1,residual=True, attention_res=[], group_norm=True).to(device)
 
     discriminator = Wang2020UnetDiscriminator(input_nc=3, # channel data(2) + real or fake bmode (1)
                                               ndf=64,
