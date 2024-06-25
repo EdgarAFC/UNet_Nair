@@ -1,13 +1,15 @@
 import os
 import  torch
 import numpy as np
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import functools
 import torch.nn as nn
 import torch
 import pickle
-
+from U_NET_BF_w8 import UNET2
 import copy
+
+from model_diff import UNETv13
 
 from gen_samples import LoadData_nair2020, downsample_channel_data
 
@@ -103,12 +105,16 @@ class Wang2020UnetGenerator(nn.Module):
 
 def load_gen_model(model_dir=None, epoch=None, num_downs=8, norm_layer=nn.BatchNorm2d, device=None):
     # Instantiate the model architecture
-    generator = Wang2020UnetGenerator(input_nc=3, #channel data (2) + latent space z (1)
-                                      output_nc=1,
-                                      num_downs=num_downs,
-                                      ngf=64,
-                                      norm_layer=norm_layer,
-                                      use_dropout=False).to(device)
+    # generator = Wang2020UnetGenerator(input_nc=3, #channel data (2) + latent space z (1)
+                                    #   output_nc=1,
+                                    #   num_downs=num_downs,
+                                    #   ngf=64,
+                                    #   norm_layer=norm_layer,
+                                    #   use_dropout=False).to(device)
+
+    # generator = UNET2(3,64,1).to(device)
+
+    generator =  UNETv13(in_channels=3,out_channels=1,residual=True, attention_res=[], group_norm=True).to(device)
 
     if isinstance(epoch, int) and epoch == -1:
         gen_history = {"train_loss": [], "val_loss": []}
@@ -179,9 +185,11 @@ if __name__ == '__main__':
     # path = '/TESIS/DATOS_1/rf_test/'
     # dir_test = os.listdir(path)
 
-    # this_dir = '/CODIGOS_TESIS/T2/wang/'
+    # this_dir = '/CODIGOS_TESIS/T2/wang/trained_models/L1_LOSS_udiff'
 
-    ###################CLUSTER####################
+    # save_dir = '/CODIGOS_TESIS/T2/generated_samples/WANG/L1_LOSS_udiff/test/'
+
+    # ###################CLUSTER####################
     #DATA DIRS
     sim_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
@@ -190,11 +198,11 @@ if __name__ == '__main__':
     dir_test = os.listdir(path)
     #MODEL DIR
     # this_dir = '/nfs/privileged/isalazar/projects/ultrasound-image-formation/exploration/Journal2023/models/wang/'
-    this_dir = '/mnt/nfs/efernandez/generated_samples/WANG/wang/'
+    this_dir = '/mnt/nfs/efernandez/trained_models/WANG/L1_LOSS_udiff/'
     #SAVE_SAMPLES
     #data_with_attenuation
     # save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
-    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_test/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_test/'
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
@@ -210,7 +218,7 @@ if __name__ == '__main__':
         simu_name = simu[:-4]
     # num_samples = 500
     # for simu in range(1,num_samples+1):
-    #     simu_name = "simu" + str(simu).zfill(5)
+        # simu_name = "simu" + str(simu).zfill(5)
         print(simu_name)
         ## Code to read channel data (2, 800, 128)
         P = LoadData_nair2020(sim_dir, simu_name)
