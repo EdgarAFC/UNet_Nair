@@ -156,7 +156,7 @@ def main():
         # write_to_file('DAS: ' + str(contrast_att))
 
         #testing model udiff
-        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
+        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/300epoch/gen_att/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
         # bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
