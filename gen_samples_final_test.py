@@ -924,25 +924,25 @@ def main():
     # model_dir='/CODIGOS_TESIS/T2/trained_models/UNet_difusiva/'
     # model_dir='/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_100steps' #AQUIII
     # model_dir='/CODIGOS_TESIS/T2/trained_models/DDPM_model/final_model_FT'
-    model_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/final_model_FT/'
+    # model_dir = '/mnt/nfs/efernandez/trained_models/DDPM_model/final_model_FT/'
     # model_dir = '/CODIGOS_TESIS/T2/trained_models/Unet_Nair_ONEPW/'
     training_epochs =300#380
-    model = UNETv13(residual=False, attention_res=[], group_norm=True).to(device)
-    model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
-    diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
+    # model = UNETv13(residual=False, attention_res=[], group_norm=True).to(device)
+    # model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
+    # diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
 
     # model_dir2='/CODIGOS_TESIS/T2/trained_models/DDPM_model/v6_TT_100steps' #AQUIII
     model_dir2 = '/mnt/nfs/efernandez/trained_models/DDPM_model/v6_TT_100steps/'
     model2 = UNETv13(residual=True, attention_res=[], group_norm=True).to(device)
     model2.load_state_dict(torch.load(f"{model_dir2}/model_{training_epochs}.pth", map_location=device))
-    # diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
+    diffusion = create_gaussian_diffusion(steps=100,noise_schedule="linear")
 
     # model = UNET(2,64,1).to(device)
     # model.load_state_dict(torch.load(f"{model_dir}/model_{training_epochs}.pth", map_location=device))
 
     depth_ini=30
 
-    # num_samples = 10
+    num_samples = 500
 
     # inclusion_shape = 'triangle'
     # h5name = "inclusion_%s.h5" % inclusion_shape
@@ -973,19 +973,22 @@ def main():
     #     plt.show()
 
     # for simu in ['simu01001', 'simu01002', 'simu01003']:
-    for simu in dir_test:
-        simu_name = simu[:-4]
+    # for simu in dir_test:
+    #     simu_name = simu[:-4]
+
+    for simu in range(1,num_samples+1):
+        simu_name = "simu" + str(simu).zfill(5)
         # simu_name = simu[:-4]
         # simu_name = simu
         # bmode, grid_full=create_phantom_bmodes2("/CODIGOS_TESIS/T2/shape",h5name,simu_name, depth_ini, device, model,diffusion)
-        bmode, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model,diffusion)
-        bmode2, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model2,diffusion)
+        # bmode, grid_full=create_phantom_bmodes_att_diff(sim_dir,simu_name, depth_ini, device, model,diffusion)
+        bmode2, grid_full=create_phantom_bmodes_att_diff(att_dir,simu_name, depth_ini, device, model2,diffusion)
         # bmode, grid_full=create_phantom_bmodes_att_conv(sim_dir,simu_name, depth_ini, device, model)
         # bmode_DAS, _ = make_bimg_das1(sim_dir, simu_name, device=device)
         # bmode_cliped = np.clip(bmode_DAS, a_min=-60, a_max=0)
         # print(np.amin(bmode_cliped))
         # print(np.amax(bmode_cliped))
-        np.save(save_dir1+simu_name+".npy", bmode)  ##modelo ft 300
+        # np.save(save_dir1+simu_name+".npy", bmode)  ##modelo ft 300
         np.save(save_dir2+simu_name+".npy", bmode2)  ##modelo ft 300
         # np.save(save_dir+"grid0000"+str(simu)+".npy", grid_full)
         # extent=[-20,20,50,0]
