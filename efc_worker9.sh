@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load jesus/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/gen_samples_final_test.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/computting_metrics_diff2.py
