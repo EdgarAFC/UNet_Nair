@@ -88,7 +88,7 @@ def main():
 
         sub_row = []
 
-        P = LoadData_nair2020(h5_dir=sim_dir,
+        P = LoadData_nair2020(h5_dir=att_dir,
                             simu_name=simu_name)
         
         depths = np.linspace(30*1e-3, 80*1e-3, num=800)
@@ -137,7 +137,7 @@ def main():
         write_to_file(region)
 
         #testing model DAS
-        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_test/'
+        test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
         bmode_output = np.load(test_DAS+filename).squeeze()
         bmode_output = np.clip(bmode_output, a_min=-60, a_max=0)
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -156,7 +156,7 @@ def main():
         write_to_file('DAS: ' + str(contrast_att))
 
         #testing model udiff
-        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_test/'
+        dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
         bmode_output = (bmode_output + 1) * 30 - 60
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
@@ -175,7 +175,7 @@ def main():
         write_to_file('DIFF: ' + str(contrast_att))
 
         #testing model wang
-        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_test/'
+        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att/'
         bmode_output = np.load(dir_model_WANG+filename).squeeze()
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
@@ -216,7 +216,7 @@ def main():
     wang_met.append(wang_decay)
     wang_met.append(wang_contrast_att)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_doc1'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_doc2'
 
     np.save(save_dir+"/met_das_test_TESIS_v1.npy", np.array(das_met))
 
@@ -225,7 +225,7 @@ def main():
     np.save(save_dir+"/met_wang_test_TESIS_v1.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_doc1.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/test_TESIS_doc2.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
