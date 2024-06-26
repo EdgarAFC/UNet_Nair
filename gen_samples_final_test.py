@@ -906,7 +906,7 @@ def main():
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
 
     save_dir1 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/final_model_FT/gen_test/'
-    save_dir2 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/300epoch/gen_test/'
+    save_dir2 = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/300epoch/gen_att/'
 
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DDPM_model/v6_TT_100steps/380epochs/gen_square/'
