@@ -942,17 +942,17 @@ def main():
 
     depth_ini=30
 
-    num_samples = 10
+    # num_samples = 10
 
-    inclusion_shape = 'triangle'
-    h5name = "inclusion_%s.h5" % inclusion_shape
+    # inclusion_shape = 'triangle'
+    # h5name = "inclusion_%s.h5" % inclusion_shape
 
-    # Get the list of all files and directories
-    # path = '/mnt/nfs/efernandez/datasets/dataRF/RF_test/'
-    path = '/TESIS/DATOS_1/rf_test/'
+    # # Get the list of all files and directories
+    path = '/mnt/nfs/efernandez/datasets/dataRF/RF_test/'
+    # path = '/TESIS/DATOS_1/rf_test/'
     dir_test = os.listdir(path)
 
-    phantom_names=["IS_L11-4v_data1_RF.h5","IS_L11-4v_data2_RF.h5","IS_L11-4v_data3_RF.h5","IS_L11-4v_data4_RF.h5"]
+    # phantom_names=["IS_L11-4v_data1_RF.h5","IS_L11-4v_data2_RF.h5","IS_L11-4v_data3_RF.h5","IS_L11-4v_data4_RF.h5"]
 
     # for simu in range(1,num_samples+1):
     #     simu_name = "simu" + str(simu).zfill(5)
