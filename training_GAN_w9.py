@@ -412,8 +412,8 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     ########################################################
-    load_epoch = -1     # set to -1 to train from scratch
-    last_epoch = 100
+    load_epoch = 100     # set to -1 to train from scratch
+    last_epoch = 300
     BATCH_SIZE = 4
     ########################################################
     print('Device is: %s' % device)
