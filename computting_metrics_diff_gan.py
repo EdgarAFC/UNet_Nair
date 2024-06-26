@@ -82,9 +82,9 @@ def main():
     #     simu_name = simu[:-4]
     #     filename=simu_name+".npy"
 
-        write_to_file('File')
-        write_to_file(filename)
-        write_to_file('---')
+        # write_to_file('File')
+        # write_to_file(filename)
+        # write_to_file('---')
 
         sub_row = []
 
@@ -113,7 +113,7 @@ def main():
             if id_col < (cx-r) or id_col > (cx+r):
                 columns_id.append(i)
 
-        write_to_file('Columns available' + str(columns_id)),
+        # write_to_file('Columns available' + str(columns_id)),
         number_columns = 30
         found_region = 0
         region = []
@@ -134,7 +134,7 @@ def main():
             
         region.append(columns_id[i:i+number_columns][id])
 
-        write_to_file(region)
+        # write_to_file(region)
 
         #testing model DAS
         test_DAS = '/mnt/nfs/efernandez/generated_samples/DAS/gen_att/'
@@ -153,7 +153,7 @@ def main():
         das_snr.append(snr)
         das_decay.append(decay_param)
         das_contrast_att.append(contrast_att)
-        write_to_file('DAS: ' + str(contrast_att))
+        # write_to_file('DAS: ' + str(contrast_att))
 
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/380epoch/gen_att/'
@@ -172,7 +172,7 @@ def main():
         diff_snr.append(snr)
         diff_decay.append(decay_param)
         diff_contrast_att.append(contrast_att)
-        write_to_file('DIFF: ' + str(contrast_att))
+        # write_to_file('DIFF: ' + str(contrast_att))
 
         #testing model wang
         dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att/'
@@ -190,7 +190,7 @@ def main():
         wang_snr.append(snr)
         wang_decay.append(decay_param)
         wang_contrast_att.append(contrast_att)
-        write_to_file('WANG: ' + str(contrast_att))
+        # write_to_file('WANG: ' + str(contrast_att))
 
         rows.append(sub_row)
         n_sample = n_sample +1
