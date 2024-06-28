@@ -97,7 +97,7 @@ def main():
 
         sub_row = []
 
-        P = LoadData_nair2020(h5_dir=sim_dir,
+        P = LoadData_nair2020(h5_dir=att_dir,
                             simu_name=simu_name)
         
         depths = np.linspace(30*1e-3, 80*1e-3, num=800)
