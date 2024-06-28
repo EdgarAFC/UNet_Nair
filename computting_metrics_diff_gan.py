@@ -175,7 +175,7 @@ def main():
         # write_to_file('DIFF: ' + str(contrast_att))
 
         #testing model wang
-        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att/'
+        dir_model_WANG = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att2/'
         bmode_output = np.load(dir_model_WANG+filename).squeeze()
         contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
         sub_row.append(contrast)
@@ -216,7 +216,7 @@ def main():
     wang_met.append(wang_decay)
     wang_met.append(wang_contrast_att)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff2'
 
     np.save(save_dir+"/met_das_test_TESIS_v1.npy", np.array(das_met))
 
@@ -225,7 +225,7 @@ def main():
     np.save(save_dir+"/met_wang_test_TESIS_v1.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff2.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
