@@ -33,12 +33,14 @@ def main():
     # field names
     fields = ['#','id', 'r', 'cx', 'cz', 'c', 
               'das_contrast', 'das_cnr', 'das_gcnr', 'das_snr', 'das_decay', 'das_contrast_att',
+              'std_contrast', 'std_cnr', 'std_gcnr', 'std_snr', 'std_decay', 'std_contrast_att',
               'diff_contrast', 'diff_cnr', 'diff_gcnr', 'diff_snr', 'diff_decay', 'diff_contrast_att',
               'wang_contrast', 'wang_cnr', 'wang_gcnr', 'wang_snr', 'wang_decay', 'wang_contrast_att',]
 
     rows = []
 
     das_met=[]
+    std_met=[]
     diff_met=[]
     wang_met=[]
 
@@ -48,6 +50,13 @@ def main():
     das_snr=[]
     das_decay=[]
     das_contrast_att=[]
+
+    std_contrast=[]
+    std_cnr=[]
+    std_gcnr=[]
+    std_snr=[]
+    std_decay=[]
+    std_contrast_att=[]
 
     diff_contrast=[]
     diff_cnr=[]
@@ -155,6 +164,25 @@ def main():
         das_contrast_att.append(contrast_att)
         # write_to_file('DAS: ' + str(contrast_att))
 
+        #testing standard training
+        test_std = '/mnt/nfs/efernandez/generated_samples/UNet_difusiva/v1_380epoch/gen_att/'
+        bmode_output = np.load(test_std+filename).squeeze()
+        # bmode_output = (bmode_output + 1) * 30 - 60
+        contrast, cnr, gcnr, snr, decay_param, contrast_att = compute_metrics(cx, cz, r, bmode_output, grid, region)
+        sub_row.append(contrast)
+        sub_row.append(cnr)
+        sub_row.append(gcnr)
+        sub_row.append(snr)
+        sub_row.append(decay_param)
+        sub_row.append(contrast_att)
+        std_contrast.append(contrast)
+        std_cnr.append(cnr)
+        std_gcnr.append(gcnr)
+        std_snr.append(snr)
+        std_decay.append(decay_param)
+        std_contrast_att.append(contrast_att)
+        # write_to_file('STD: ' + str(contrast_att))
+
         #testing model udiff
         dir_model_udiff = '/mnt/nfs/efernandez/generated_samples/DDPM_model/v6_TT_100steps/300epoch/gen_att/'
         bmode_output = np.load(dir_model_udiff+filename).squeeze()
@@ -202,6 +230,13 @@ def main():
     das_met.append(das_decay)
     das_met.append(das_contrast_att)
 
+    std_met.append(std_contrast)
+    std_met.append(std_cnr)
+    std_met.append(std_gcnr)
+    std_met.append(std_snr)
+    std_met.append(std_decay)
+    std_met.append(std_contrast_att)
+
     diff_met.append(diff_contrast)
     diff_met.append(diff_cnr)
     diff_met.append(diff_gcnr)
@@ -216,16 +251,18 @@ def main():
     wang_met.append(wang_decay)
     wang_met.append(wang_contrast_att)
 
-    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff2'
+    save_dir='/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff3'
 
     np.save(save_dir+"/met_das_test_TESIS_v1.npy", np.array(das_met))
+
+    np.save(save_dir+"/met_std_test_TESIS_v1.npy", np.array(std_met))
 
     np.save(save_dir+"/met_diff_test_TESIS_v1.npy", np.array(diff_met))
 
     np.save(save_dir+"/met_wang_test_TESIS_v1.npy", np.array(diff_met))
     
     # name of csv file
-    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff2.csv'
+    filename = '/mnt/nfs/efernandez/generated_samples/mets/att_gan_diff3.csv'
  
     # writing to csv file
     with open(filename, 'w') as csvfile:
