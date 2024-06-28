@@ -85,7 +85,7 @@ def main():
 
     for simu in range(1,num_samples+1):
         simu_name = "simu" + str(simu).zfill(5)
-        # filename=simu_name+".npy"
+        filename=simu_name+".npy"
 
     # for simu in dir_test:
     #     simu_name = simu[:-4]
