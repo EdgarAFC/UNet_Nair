@@ -187,10 +187,10 @@ if __name__ == '__main__':
 
     # this_dir = '/CODIGOS_TESIS/T2/wang/trained_models/L1_LOSS_udiff'
 
-    # save_dir = '/CODIGOS_TESIS/T2/generated_samples/WANG/L1_LOSS_udiff/test/'
+    # save_dir = '/CODIGOS_TESIS/T2/generated_samples/WANG/L1_LOSS_udiff/att/'
 
     # ###################CLUSTER####################
-    #DATA DIRS
+    # #DATA DIRS
     sim_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.0Att/'
     att_dir = '/mnt/nfs/isalazar/datasets/simulatedCystDataset/raw_0.5Att/'
 
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     #SAVE_SAMPLES
     #data_with_attenuation
     # save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/gen_att/'
-    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att/'
+    save_dir = '/mnt/nfs/efernandez/generated_samples/WANG/L1_LOSS_udiff/gen_att2/'
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     print(device)
