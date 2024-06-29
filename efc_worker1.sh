@@ -6,5 +6,5 @@
 #SBATCH --output="log_nair_samp.out"
 
 source /etc/profile.d/modules.sh
-module load ifsr-advpertbeamf/1.0
+module load edgar/1.0
 srun python /mnt/nfs/efernandez/projects/UNet_Nair/sampling_Nair.py
