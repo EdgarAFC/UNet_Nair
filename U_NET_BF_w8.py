@@ -122,7 +122,7 @@ class Up_Conv(nn.Module):
   '''
   def __init__(self, channels_in, channels_out):
     super().__init__()
-    self.upsample_layer = nn.ConvTranspose2d(channels_in, channels_in//2, kernel_size=2, stride=2)
+    self.upsample_layer = nn.ConvTranspose2d(channels_in//2, channels_in//2, kernel_size=2, stride=2)
     self.decoder = Double_Conv(channels_in, channels_out)
 
   def forward(self, x1, x2):
