@@ -7,4 +7,4 @@
 
 source /etc/profile.d/modules.sh
 module load students_env/1.0
-srun python /mnt/nfs/efernandez/projects/UNet_Nair/sampling_Nair.py
+srun python /mnt/nfs/efernandez/projects/UNet_Nair/computting_metrcis_nair.py
