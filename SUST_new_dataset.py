@@ -713,7 +713,7 @@ def main():
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DAS_75PW/'
     # save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_gen/'
-    save_dir = '/mnt/nfs/efernandez/datasets/SUST/7PW_gen/'
+    save_dir = '/mnt/nfs/efernandez/datasets/data7PW/7PW_gen/'
 
     # onepw_dir = '/TESIS/DATOS_TESIS2/target_from_raw/'  #Path de las imagenes reconstruidas con DAS 1PW
 
