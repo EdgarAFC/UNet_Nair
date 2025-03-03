@@ -709,7 +709,7 @@ def main():
     # pw75_dir = '/TESIS/DATOS_TESIS2/'  #Path del archivo simus_01001-02000.h5
     # sim_dir = '/CODIGOS_TESIS/T2/dataset'
 
-    pw75_dir = '/mnt/nfs/efernandez/datasets/data75PW/'
+    pw75_dir = '/mnt/nfs/isalazar/datasets/75PW/'
 
     # save_dir = '/CODIGOS_TESIS/T2/generated_samples/DAS_75PW/'
     # save_dir = '/mnt/nfs/efernandez/datasets/data75PW/75PW_gen/'
